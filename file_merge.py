@@ -5,7 +5,7 @@ Created on Tue Dec  5 09:48:26 2017
 @author: matt.slevin
 """
 import pandas as pd
-import os as os 
+import os 
 import numpy as np
 #Script one, for organising data storage. Raw input is the csv files.  
 
@@ -71,32 +71,30 @@ def read_to_panda(f_name):
 #The working directory is,
 #f_dir="C:\Users\matt.slevin\Documents\data acquisition_systme\RAW_DATA\RAW_DATA"
 
-cd "C:\Users\matt.slevin\Documents\data acquisition_systme\RAW_DATA\RAW_DATA"
-
 # TODO: Set up automatic change to our working dir
 #os.chdir("Users\matt.slevin\Documents\data acquisition_systme\RAW_DATA\RAW_DATA")
 
-#Port 1
-fname_az_copolar="AW3023_V4_R1_AZ_CO_P1_T0.txt"
-fname_az_cross="AW3023_V4_R1_AZ_CR_P1_T0.txt"
-fname_el_copolar="AW3023_V4_R1_EL_CO_P1_T0.txt"
+def read_in_port_data():    
+    #Port 1
+    fname_az_copolar="AW3023_V4_R1_AZ_CO_P1_T0.txt"
+    fname_az_cross="AW3023_V4_R1_AZ_CR_P1_T0.txt"
+    fname_el_copolar="AW3023_V4_R1_EL_CO_P1_T0.txt"
 
-az_co=read_to_panda(fname_az_copolar)
-az_cross=read_to_panda(fname_az_cross)
-el_co=read_to_panda(fname_el_copolar)
+    az_co=read_to_panda(fname_az_copolar)
+    az_cross=read_to_panda(fname_az_cross)
+    el_co=read_to_panda(fname_el_copolar)
 
-p1_data=[az_co,az_cross,el_co]
-#break line by line
-#break into tabs
+    p1_data=[az_co,az_cross,el_co]
+    #break line by line
+    #break into tabs
 
+    return p1_data
 
 
 
 
 #Read in csv file as a string
 #Put into panda dataframes, or numpy
-
-az_co=pd.read_csv(az_copolar)
 
 #
 #   Formating of our panda files (get rid of our unessary data)
