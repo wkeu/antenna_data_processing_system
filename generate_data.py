@@ -77,37 +77,56 @@ az_co = port_s1["az_co"]["amplitude"]
 az_cr = port_s1["az_cross"]["amplitude"]
 el_co = port_s1["el_co"]["amplitude"]
 
-co = az_co
-cr = az_cr
+# convert pandas string values to float values
+co = az_co.convert_objects(convert_numeric=True)
+cr = az_cr.convert_objects(convert_numeric=True)
+
+
 ###############################################################################
 #
-#   Azimuth Co Pol 3dB beamwidth
+#   Find Peak amplitude & angle
 #
 ###############################################################################
 
-az_peak = co.max()                               # find peak valie in each column
+az_peak_amp = co.max()                                                              # find peak valie in each column
 
-az_peak_pos = co.idxmax()                        # find index no of peak value
+az_peak_pos = co.idxmax()                                                           # find index no of peak value
 
-value = az_peak - 3
+az_peak = pd.concat([az_peak_amp,az_peak_pos], axis = 1)                            # join az_peak_amp & az peak_pos
+az_peak.columns = ['amplitude','angle']
+
 
 ###############################################################################
 #
 #   Azimuth Cross Polar Discrimiation @ sector
 #
 ###############################################################################
-sector = 180 # define sector as 180
-
-xpol_at_sector = co.iloc[sector] - cr.iloc[sector] # co at sector - cr at sector
-
-
-###############################################################################
-#
-#   normalise co & cr together
-#
-###############################################################################
 normalise_co = co - az_peak 
 normalise_cr = cr - az_peak
+
+###############################################################################
+#
+#   Front to back ratio 
+#
+###############################################################################
+def front_to_Back_ratio():
+    return fbr
+
+sector = 180                                                                        # define sector angle
+
+back_sight1 = sector - 180                                                          # define the backsight(back of antenna). eg 0 & 360 degrees
+back_sight2 = sector + 180
+fbr_range = 30                                                                      # define +/- range to check for FBR
+
+fbr_search1 = back_sight1 + (fbr_range+1)                                           # this is search range 1 eg 0 - 30 degrees
+fbr_search2 = back_sight2 - (fbr_range+1)                                           # this is search range 2 eg 30 - 360 degrees
+
+fbr1, _, fbr2 = np.split(co,[fbr_search1,fbr_search2], axis = 0)                    # Split Co dataframe into 3 segements   
+
+fbr_max = pd.concat([fbr1,fbr2], axis = 0)                                          # join fbr1 & fbr2
+
+# Output#
+fbr = az_peak_amp - fbr_max.max()                                                   # Find fbr = az peak - peak value in search range
 
 
 ###############################################################################
@@ -116,10 +135,14 @@ normalise_cr = cr - az_peak
 #
 ###############################################################################
 
-plt.plot(normalise_co)
-plt.plot(normalise_cr)
+#plt.plot(normalise_co)
+#plt.plot(normalise_cr)
+
+
+#plt.grid()
+#plt.show()
 
 
 
-plt.grid()
-plt.show()
+
+
