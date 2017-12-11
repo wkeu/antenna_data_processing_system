@@ -10,7 +10,6 @@ Before running this file. Make sure that you set the working directory to the
 working git repository. 
 """
 
-from file_merge import * 
 
 ###############################################################################
 #
@@ -43,7 +42,7 @@ el_co
 ###############################################################################
 
 #Read in data 
-port_s1=read_in_port_data()
+
 
 """
 port_s1 now contains all port1 test data in the following format:
@@ -68,9 +67,17 @@ el_co
 #
 ###############################################################################
 
+#import custom scripts
+from file_merge import * 
+from formula import *
+
+#import libs
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+#import data
+port_s1=read_in_port_data()
 
 # define dataframe pages
 az_co = port_s1["az_co"]["amplitude"]
@@ -81,66 +88,66 @@ el_co = port_s1["el_co"]["amplitude"]
 co = az_co.convert_objects(convert_numeric=True)
 cr = az_cr.convert_objects(convert_numeric=True)
 
+az_peak=find_az_peak(co,cr)                                                          # import function find az_peaks
 
-###############################################################################
-#
-#   Find Peak amplitude & angle
-#
-###############################################################################
+normalised_az = normalise(co,cr)                                                     # import function normalise
+    
+xpol_at_sector = sector_xpol(co,cr)                                                 # import function sector_xpol                     
 
-az_peak_amp = co.max()                                                              # find peak valie in each column
+fbr = front_to_back(co,cr)                                                          # import function front_to_back
 
-az_peak_pos = co.idxmax()                                                           # find index no of peak value
+#Calculate bw_3db
 
-az_peak = pd.concat([az_peak_amp,az_peak_pos], axis = 1)                            # join az_peak_amp & az peak_pos
-az_peak.columns = ['amplitude','angle']
-
-
-###############################################################################
-#
-#   Azimuth Cross Polar Discrimiation @ sector
-#
-###############################################################################
-normalise_co = co - az_peak 
-normalise_cr = cr - az_peak
-
-###############################################################################
-#
-#   Front to back ratio 
-#
-###############################################################################
-def front_to_Back_ratio():
-    return fbr
-
-sector = 180                                                                        # define sector angle
-
-back_sight1 = sector - 180                                                          # define the backsight(back of antenna). eg 0 & 360 degrees
-back_sight2 = sector + 180
-fbr_range = 30                                                                      # define +/- range to check for FBR
-
-fbr_search1 = back_sight1 + (fbr_range+1)                                           # this is search range 1 eg 0 - 30 degrees
-fbr_search2 = back_sight2 - (fbr_range+1)                                           # this is search range 2 eg 30 - 360 degrees
-
-fbr1, _, fbr2 = np.split(co,[fbr_search1,fbr_search2], axis = 0)                    # Split Co dataframe into 3 segements   
-
-fbr_max = pd.concat([fbr1,fbr2], axis = 0)                                          # join fbr1 & fbr2
-
-# Output#
-fbr = az_peak_amp - fbr_max.max()                                                   # Find fbr = az peak - peak value in search range
-
-
+bw_3db = find_3db_bw(az_co)
 ###############################################################################
 #
 #   Plot normalised cartesian graph
 #
 ###############################################################################
 
-#plt.plot(normalise_co)
-#plt.plot(normalise_cr)
+
+plt.plot(normalise(co,cr))
 
 
 #plt.grid()
 #plt.show()
+#plt.savefig('P1 AZ.png')
+
+###############################################################################
+#
+#   Results table
+#
+###############################################################################
+
+
+def results_table(co,cr):                                                           # Function to output results of calc to table
+    fbr = front_to_back(co,cr)
+    sector_at_xpol = sector_xpol(co,cr)
+    results = pd.DataFrame()
+    results = pd.concat([front_to_back(co,cr),sector_xpol(co,cr)],axis = 1)
+    return results
+
+Results = results_table(co,cr)                                                      #assign variable Results to the reuslts table
+Results.loc['Average'] = Results.mean()                                             #add row named average to table calulating average of each column
+Results.loc['Max'] = Results.max()                                                  #add row named max to table calulating max of each column
+Results.loc['Min'] = Results.min()                                                  #add row named min to table calulating min of each column
+
+
+Results.to_csv('P1 results.csv')
+#writer = pd.ExcelWriter('output.xlsx')
+#Results.to_excel(writer,'Sheet1')
+#writer.save()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
