@@ -7,7 +7,8 @@ Created on Fri Dec  8 09:21:40 2017
 
 import numpy as np
 import pandas as pd
-
+from scipy.signal import savgol_filter
+from peakdetect import peakdetect
 ###############################################################################
 #
 #   Find Peak amplitude & angle
@@ -50,7 +51,7 @@ def sector_xpol(co,cr):
 #   Front to back ratio 
 #
 ###############################################################################
-def front_to_back(co,cr):
+def front_to_back(co):
     sector = 180                                                                        # define sector angle
     back_sight1 = sector - 180                                                          # define the backsight(back of antenna). eg 0 & 360 degrees
     back_sight2 = sector + 180
@@ -89,13 +90,6 @@ def stretch_axis(x,y,factor):
     #interpolate ("stretch") the y_axis to match x_axis. 
     y_strch = np.interp(x_strch, x, y)
     return x_strch, y_strch
-
-def find_3db_intersection(wave):
-    a=0
-    b=0
-    return a,b
-
-#TODO: Make into a function that will find the 3db beamwidth for all frequencies
 
 #TODO: Add support for detecting the number of peaks. (For case when we have 
 #       A twin-peak in amp plot). This a unique feature and thus a low priority
@@ -141,9 +135,11 @@ def find_3db_bw(az_co):
         lowwer_angle, upper_angle =find_3db_intersection_angles(az_co[i])
         #Calculate 3db bw
         bw_3db.append( np.abs(lowwer_angle-upper_angle) )
-        
+       
+    bw_3db_pd=pd.DataFrame({"3db Beamwidth":bw_3db,"index":key_list})
+    bw_3db_pd=bw_3db_pd.set_index('index') 
             
-    return bw_3db
+    return bw_3db_pd
         
 ###############################################################################
 #
@@ -164,8 +160,10 @@ def find_squint(az_co):
         #Culculate squint
         x = cal_squint(lowwer_angle,upper_angle)
         sqt.append( x )
-        
-    return sqt
+    
+    sqt_pd=pd.DataFrame({"Squint":sqt,"index":key_list})
+    sqt_pd=sqt_pd.set_index('index') 
+    return sqt_pd
     
 
 #function to calculate squint. Inputs are 3db intersection points
@@ -174,3 +172,125 @@ def cal_squint(r_int,l_int):
     boresight=180.0 #this is our ideal value 
     squint=midpoint-boresight
     return squint
+
+###############################################################################
+#
+# Calculate first USL 
+#
+###############################################################################
+
+#Function to find the peaks of a wave
+def find_peaks(wave,factor=100):
+
+    #Convert to numpy matrix with dtype float
+    wave_np=np.asarray(wave,dtype='float64')
+
+    #Stretch the Axis
+    angle, amp = stretch_axis(np.arange(0, 360),wave_np,factor)
+
+    #Smooth the signal 
+    amp_smooth=savgol_filter(amp, 75, 3)
+
+    #Find the peaks and troughs in wave
+    peaks, troughs = peakdetect(amp_smooth, lookahead=300)
+
+    #Put into dataframe
+    df_peaks = pd.DataFrame(data=peaks,columns=["angle","amp"])
+
+    #Convert index into angle
+    df_peaks.angle=df_peaks.angle/factor
+
+    return df_peaks
+
+#Calulate the 1st USL for a given frequency
+def cal_first_usl(wave):
+   
+    #Find the peaks and troughs
+    df_peaks = find_peaks(wave)
+
+    #Find index of peak
+    idx_max=df_peaks.idxmax()
+
+    #find amp of peak and 1st usl 
+    amp_of_peak=df_peaks["amp"][idx_max["amp"]]
+    amp_of_1stlobe=df_peaks["amp"][idx_max["amp"]-1]
+    first_usl=amp_of_peak-amp_of_1stlobe
+    
+    return first_usl
+
+
+#Calulate the 1st USL for a table
+def find_first_usl(el_co):
+    #Convert the data so that it is stored in a more appropriate format
+    el_co = el_co.convert_objects(convert_numeric=True)    
+    
+    #Take column index into array 
+    key_list=el_co.keys()
+    first_usl=list()
+
+    for i in key_list:
+        #Add usl to list for given column
+        first_usl.append(cal_first_usl(el_co[i]))
+        
+    #Format to panda
+    first_usl_pd=pd.DataFrame({"1st USL":first_usl,"index":key_list})
+    first_usl_pd=first_usl_pd.set_index('index')   
+        
+    return first_usl_pd
+
+###############################################################################
+#
+#   USL in Range
+#
+###############################################################################
+
+#TODO:   Add support for wrap around. (ie if we go into a ngative number) the
+#        problem arises if we have a peak that is not centred at around 180 
+#        degrees
+    
+#Finds the difference in amplitude between largest side lobe and peaks over a 
+#certain frequency range. By default 180 degrees away from the peak. 
+def calc_usl_in_range(wave,angle_range=180):
+    
+    #Find the peaks and troughs
+    df_peaks = find_peaks( wave )
+    
+    #find peak amp,angle and index
+    _,peak_amp=df_peaks.max()
+    _,peak_idx=df_peaks.idxmax()
+    peak_angle=df_peaks["angle"][peak_idx]
+    
+    #Remove all values not in range 
+    df_peaks = df_peaks[(df_peaks.angle < peak_angle) & (df_peaks.angle > peak_angle-angle_range)  ]
+    
+    #find the peak of largest side lobe in range
+    _,peak_sl_amp=df_peaks.max()
+    
+    #difference in amp
+    usl=peak_amp-peak_sl_amp
+
+    if usl<0:
+        print("Warning: Check USL Value")
+    
+    return usl
+
+#Calulate the USL for a table with a given angle range
+def find_usl_in_range(el_co,angle_range=180):
+
+    #Convert the data so that it is stored in a more appropriate format
+    el_co = el_co.convert_objects(convert_numeric=True)    
+    
+    #Take column index into array 
+    key_list=el_co.keys()
+    usl_in_range=list()
+
+    for i in key_list:
+        #Add usl to list for given column
+        usl_in_range.append(    calc_usl_in_range(el_co[i],angle_range)     )
+    
+    #Format
+    usl_pd=pd.DataFrame({"USL":usl_in_range,"index":key_list})
+    usl_pd=usl_pd.set_index('index')
+        
+    return usl_pd    
+

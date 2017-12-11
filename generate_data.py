@@ -10,71 +10,82 @@ Before running this file. Make sure that you set the working directory to the
 working git repository. 
 """
 
-
 ###############################################################################
 #
-#   Import Data
-#
-###############################################################################
-
-
-"""
-port_s1 now contains all port1 test data in the following format:
-
-az_co
-    -amp
-    -phase
-    
-az_cross
-    -amp
-    -phase
-    
-el_co
-    -amp
-    -phase
-    
-"""
-
-###############################################################################
-#
-#   Calculations
+#   Import Libaries
 #
 ###############################################################################
 
-#Read in data 
-
-
-"""
-port_s1 now contains all port1 test data in the following format:
-
-az_co
-    -amp
-    -phase
-    
-az_cross
-    -amp
-    -phase
-    
-el_co
-    -amp
-    -phase
-    
-"""
-
-###############################################################################
-#
-#   Calculations
-#
-###############################################################################
-
-#import custom scripts
 from file_merge import * 
 from formula import *
-
-#import libs
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+###############################################################################
+#
+#   Functions for ploting
+#
+###############################################################################
+
+#TODO: Title and legend
+#Catisian plot of normalised test data
+def plot_norm_cart(az_co,az_cr):
+    #normalise 
+    normalised_az = normalise(az_co,az_cr)
+    
+    #Create plot
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.plot(normalised_az)
+    ax1.grid()
+
+#TODO: Needs formating 
+#Polar plot of normalised test data    
+def plot_norm_polar(az_co,az_cr):
+    #Normalise
+    normalised_az = normalise(az_co,az_cr)
+    #isolate wave 
+    angle_deg=np.arange(0,360,1)
+    angle_rad=np.deg2rad(angle_deg)
+
+    #Create plot
+    fig2 = plt.figure()
+    ax2 = fig2.add_subplot(111,projection='polar')
+    ax2.plot(angle_rad, normalised_az)
+    
+###############################################################################
+#
+#   Results table
+#
+###############################################################################
+
+def results_table(az_co,az_cr,el_co): 
+    #Perform our calculations                                                          # Function to output results of calc to table
+    xpol_at_sector = sector_xpol(az_co,az_cr)                                                 # import function sector_xpol                     
+    fbr = front_to_back(az_co)                                                          # import function front_to_back
+    bw_3db = find_3db_bw(az_co)
+    first_usl=find_first_usl(el_co)
+    usl_range=find_usl_in_range(el_co)
+    squint=find_squint(az_co)
+    
+    #Put into a dataframe
+    results = pd.DataFrame()
+    results = pd.concat([bw_3db,squint,xpol_at_sector,fbr,first_usl,usl_range],axis = 1)
+    
+    #Add average min and max
+    results.loc['Average'] = results.mean()                                             #add row named average to table calulating average of each column
+    results.loc['Max'] = results.max()                                                  #add row named max to table calulating max of each column
+    results.loc['Min'] = results.min()                                                  #add row named min to table calulating min of each column
+
+    return results
+                                                    #assign variable Results to the reuslts table
+
+###############################################################################
+#
+#   Reading in data and doing calculations
+#
+###############################################################################
 
 #import data
 port_s1=read_in_port_data()
@@ -85,71 +96,20 @@ az_cr = port_s1["az_cross"]["amplitude"]
 el_co = port_s1["el_co"]["amplitude"]
 
 # convert pandas string values to float values
-co = az_co.convert_objects(convert_numeric=True)
-cr = az_cr.convert_objects(convert_numeric=True)
+az_co = az_co.convert_objects(convert_numeric=True)
+az_cr = az_cr.convert_objects(convert_numeric=True)
+el_co = az_cr.convert_objects(convert_numeric=True)
 
-az_peak=find_az_peak(co,cr)                                                          # import function find az_peaks
-
-normalised_az = normalise(co,cr)                                                     # import function normalise
-    
-xpol_at_sector = sector_xpol(co,cr)                                                 # import function sector_xpol                     
-
-fbr = front_to_back(co,cr)                                                          # import function front_to_back
-
-#Calculate bw_3db
-
-bw_3db = find_3db_bw(az_co)
-###############################################################################
-#
-#   Plot normalised cartesian graph
-#
-###############################################################################
-
-
-plt.plot(normalise(co,cr))
-
-
-#plt.grid()
-#plt.show()
-#plt.savefig('P1 AZ.png')
-
-###############################################################################
-#
-#   Results table
-#
-###############################################################################
-
-
-def results_table(co,cr):                                                           # Function to output results of calc to table
-    fbr = front_to_back(co,cr)
-    sector_at_xpol = sector_xpol(co,cr)
-    results = pd.DataFrame()
-    results = pd.concat([front_to_back(co,cr),sector_xpol(co,cr)],axis = 1)
-    return results
-
-Results = results_table(co,cr)                                                      #assign variable Results to the reuslts table
-Results.loc['Average'] = Results.mean()                                             #add row named average to table calulating average of each column
-Results.loc['Max'] = Results.max()                                                  #add row named max to table calulating max of each column
-Results.loc['Min'] = Results.min()                                                  #add row named min to table calulating min of each column
-
-
+#Generate summary table for data    
+Results = results_table(az_co,az_cr,el_co)  
+#Save data to a CSV
 Results.to_csv('P1 results.csv')
+
+#Cart Plot
+plot_norm_cart(az_co,az_cr)
+plot_norm_polar(az_co,az_cr)
+
 #writer = pd.ExcelWriter('output.xlsx')
 #Results.to_excel(writer,'Sheet1')
 #writer.save()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

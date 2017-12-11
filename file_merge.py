@@ -53,7 +53,7 @@ def read_to_panda(f_name):
     phase=list()
 
     #Loop to iterate through each frequency. Capturing each column appropriatly.      
-    for j in range(1,len(data_per_frequency)-1):
+    for j in range(1,len(data_per_frequency)):
         
         frequency_val= data_per_frequency[j].split("\t")[1] # Capture the frequency value
     
@@ -107,6 +107,3 @@ def read_in_port_data():
     #pickle.dump( p1_data, open( "p1_data.p", "wb" ) )
 
     return p1_data
-
-
-
