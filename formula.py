@@ -289,7 +289,7 @@ def find_usl_in_range(el_co,angle_range=180):
         usl_in_range.append(    calc_usl_in_range(el_co[i],angle_range)     )
     
     #Format
-    usl_pd=pd.DataFrame({"USL":usl_in_range,"index":key_list})
+    usl_pd=pd.DataFrame({"USL in ra":usl_in_range,"index":key_list})
     usl_pd=usl_pd.set_index('index')
         
     return usl_pd    
