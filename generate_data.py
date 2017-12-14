@@ -68,7 +68,7 @@ def plot_norm_cart(az_co,az_cr):
     
     #Export Plot
     
-    plt.savefig('P1 AZ Cartesian.png')
+    plt.savefig('P1 AZ Cartesian.png',dpi = 1100)
     
     
     
