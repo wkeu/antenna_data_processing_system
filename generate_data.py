@@ -18,13 +18,12 @@ working git repository.
 
 from file_merge import * 
 from formula import *
+from antenna_plots import *
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 
 ###############################################################################
 #
+<<<<<<< HEAD
 #   Functions for ploting
 #
 ###############################################################################
@@ -99,6 +98,8 @@ def plot_norm_polar(az_co,az_cr):
     
 ###############################################################################
 #
+=======
+>>>>>>> 4547076f352b06b641d4b0e4e09d1bd408b387c1
 #   Results table
 #
 ###############################################################################
@@ -146,14 +147,12 @@ el_co = el_co.convert_objects(convert_numeric=True)
 #Generate summary table for data    
 Results = results_table(az_co,az_cr,el_co)  
 #Save data to a CSV
-Results.to_csv('P1 results.csv')
+#Results.to_csv('P1 results.csv')
 
 #Cart Plot
 plot_norm_cart(az_co,az_cr)
 plot_norm_polar(az_co,az_cr)
 
-
 #writer = pd.ExcelWriter('output.xlsx')
 #Results.to_excel(writer,'Sheet1')
 #writer.save()
-
