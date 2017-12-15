@@ -87,9 +87,9 @@ def read_to_panda(f_name):
 #Function to read in data for one port
 def read_in_port_data():
     #File names    
-    fname_az_copolar="AW3023_V4_R1_AZ_CO_P1_T0.txt"
-    fname_az_cross="AW3023_V4_R1_AZ_CR_P1_T0.txt"
-    fname_el_copolar="AW3023_V4_R1_EL_CO_P1_T0.txt"
+    fname_az_copolar="OD AW3645 V1 R1 P1 N45 AZ CO PATT.txt"
+    fname_az_cross="OD AW3645 V1 R1 P1 P45 AZ CR PATT.txt"
+    fname_el_copolar="OD AW3645 V1 R1 P1 N45 EL CO PATT.txt"
 
     #Setting up path to subdir
     sub_dir = "\\RAW_DATA\\RAW_DATA\\"

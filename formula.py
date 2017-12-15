@@ -122,7 +122,7 @@ def find_3db_intersection_angles(wave_str):
 
 
 #Function to find the 3db beamwidths for a given graph
-def find_3db_bw(az_co):
+def find_3db_bw(az_co, measurement_type="3db Beamwidth"):
     
     #Collect keys    
     key_list=az_co.keys()
@@ -135,11 +135,13 @@ def find_3db_bw(az_co):
         lowwer_angle, upper_angle =find_3db_intersection_angles(az_co[i])
         #Calculate 3db bw
         bw_3db.append( np.abs(lowwer_angle-upper_angle) )
-       
-    bw_3db_pd=pd.DataFrame({"3db Beamwidth":bw_3db,"index":key_list})
+    
+    #Format into a data frame
+    bw_3db_pd=pd.DataFrame({measurement_type:bw_3db,"index":key_list})
     bw_3db_pd=bw_3db_pd.set_index('index') 
             
     return bw_3db_pd
+
         
 ###############################################################################
 #
@@ -250,7 +252,7 @@ def find_first_usl(el_co):
     
 #Finds the difference in amplitude between largest side lobe and peaks over a 
 #certain frequency range. By default 180 degrees away from the peak. 
-def calc_usl_in_range(wave,angle_range=180):
+def calc_usl_in_range(wave,angle_range=20):
     
     #Find the peaks and troughs
     df_peaks = find_peaks( wave )
@@ -271,11 +273,19 @@ def calc_usl_in_range(wave,angle_range=180):
 
     if usl<0:
         print("Warning: Check USL Value")
-    
+        
+    if np.isnan(usl):
+        print("failed to find usl in range")
+        
+        peak_lobe_itx = peak_angle-angle_range
+        print(peak_lobe_itx)
+        usl=peak_amp-wave[int(peak_lobe_itx)]
+        print (usl) 
+        
     return usl
 
 #Calulate the USL for a table with a given angle range
-def find_usl_in_range(el_co,angle_range=180):
+def find_usl_in_range(el_co,angle_range=20):
 
     #Convert the data so that it is stored in a more appropriate format
     el_co = el_co.convert_objects(convert_numeric=True)    

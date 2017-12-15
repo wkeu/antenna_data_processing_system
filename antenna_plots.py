@@ -17,7 +17,7 @@ import numpy as np
 ###############################################################################
 
 #Cartisian plot of normalised test data
-def plot_norm_cart(az_co,az_cr):
+def plot_norm_cart(az_co,az_cr,fname):
     
     #Turn off plot so that it only saves it and dosnt show it
     plt.ioff() 
@@ -48,16 +48,16 @@ def plot_norm_cart(az_co,az_cr):
     ax1.set_xlabel('Angle')
    
     #Add legends
-    legend1 = ax1.legend(headers_az_co,fancybox = True, framealpha=0.5,title='Co/Cr',prop={'size':10})
+    legend1 = ax1.legend(headers_az_co,fancybox = True, framealpha=0.5,title='freq',prop={'size':10})
  
     ax1.add_artist(legend1)
 
     #Export Plot
-    plt.savefig('P1 AZ Cartesian 1.png', dpi=600)  
+    plt.savefig(fname+'.png', dpi=600)  
     plt.ion() 
     
 #Polar plot of normalised test data    
-def plot_norm_polar(az_co,az_cr):
+def plot_norm_polar(az_co,az_cr,fname):
     
     plt.ioff()
     #Normalise
@@ -76,9 +76,10 @@ def plot_norm_polar(az_co,az_cr):
     ax2.plot(angle_rad, normalised_az,linewidth=0.75)
     ax2.grid(alpha=0.25) #Set transparency of grid to 25%
     ax2.set_ylim([-40,0])
-    legend1 = ax2.legend(headers_az_co, bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.5,title='Co/Cr',prop={'size':10})
+    legend1 = ax2.legend(headers_az_co, bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.5,title='freq',prop={'size':10})
 
     ax2.add_artist(legend1)
 
-    plt.savefig('P1 AZ Polar 1.png', dpi=600) 
+    plt.savefig(fname+'.png', dpi=600) 
     plt.ion() 
+    
