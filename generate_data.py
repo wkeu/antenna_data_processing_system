@@ -52,6 +52,7 @@ def results_table(az_co,az_cr,el_co):
     return results
                                                     #assign variable Results to the reuslts table
 
+
 ###############################################################################
 #
 #   Reading in data and doing calculations
@@ -97,6 +98,10 @@ def calulated_based_per_port(port_s1,port_name):
 #import data
 #Alternatively we can use sub dir=\\raw_data\\
 all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_1\\"     )
+plot_norm_cart(az_co,az_cr,fname="P1 AZ Cart")
+plot_norm_cart(el_co,el_co,fname="P1 EL Cart")
+plot_norm_polar(az_co,az_cr,fname="P1 AZ Polar")
+plot_norm_polar(el_co,el_co,fname="P1 EL Polar")
 
 for port_name in all_ports:
     calulated_based_per_port(all_ports[port_name],port_name)

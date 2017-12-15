@@ -156,6 +156,14 @@ def get_file_names_in_dir(path):
 #Function to read in data for one port
 def read_in_data_all_ports(sub_dir):
     
+def read_in_port_data():
+    #File names    
+    fname_az_copolar="OD AW3645 V1 R1 P1 N45 AZ CO PATT.txt"
+    fname_az_cross="OD AW3645 V1 R1 P1 P45 AZ CR PATT.txt"
+    fname_el_copolar="OD AW3645 V1 R1 P1 N45 EL CO PATT.txt"
+
+    #Setting up path to subdir
+    sub_dir = "\\RAW_DATA\\RAW_DATA\\"
     path=os.getcwd()+sub_dir
     f_names=get_file_names_in_dir(path)
 

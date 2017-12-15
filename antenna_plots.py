@@ -49,6 +49,7 @@ def plot_norm_cart(az_co,az_cr,fname):
    
     #Add legends
     legend1 = ax1.legend(headers_az_co,fancybox = True, bbox_to_anchor=(1.05, 1),framealpha=0.75,title='freq',prop={'size':10})
+    legend1 = ax1.legend(headers_az_co,fancybox = True, framealpha=0.5,title='freq',prop={'size':10})
  
     ax1.add_artist(legend1)
 
@@ -81,6 +82,7 @@ def plot_norm_polar(az_co,az_cr,fname):
     ax2.grid(alpha=0.25) #Set transparency of grid to 25%
     ax2.set_ylim([-40,0])
     legend1 = ax2.legend(headers_az_co, bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.75,title='freq',prop={'size':10})
+    legend1 = ax2.legend(headers_az_co, bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.5,title='freq',prop={'size':10})
 
     ax2.add_artist(legend1)
 
