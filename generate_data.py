@@ -31,14 +31,15 @@ def results_table(az_co,az_cr,el_co):
     #Perform our calculations                                                          # Function to output results of calc to table
     xpol_at_sector = sector_xpol(az_co,az_cr)                                              # import function sector_xpol                     
     fbr = front_to_back(az_co)                                                          # import function front_to_back
-    bw_3db = find_3db_bw(az_co)
+    az_bw_3db = find_3db_bw(az_co,"Az Co 3db BW")
+    el_bw_3db = find_3db_bw(el_co,"El Co 3db BW")
     first_usl=find_first_usl(el_co)
     usl_range=find_usl_in_range(el_co)
     squint=find_squint(az_co)
     
     #Put into a dataframe
     results = pd.DataFrame()
-    results = pd.concat([bw_3db,squint,xpol_at_sector,fbr,first_usl,usl_range],axis = 1)
+    results = pd.concat([az_bw_3db,el_bw_3db,squint,xpol_at_sector,fbr,first_usl,usl_range],axis = 1)
     
     #Add average min and max
     results.loc['Average'] = results.mean()                                             #add row named average to table calulating average of each column
@@ -55,12 +56,14 @@ def results_table(az_co,az_cr,el_co):
 ###############################################################################
 
 #import data
-port_s1=read_in_port_data()
+#Alternatively we can use sub dir=\\raw_data\\
+all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_3\\"     )
+port_s1=all_ports["P2"]
 
 # define dataframe pages
-az_co = port_s1["az_co"]["amplitude"]
-az_cr = port_s1["az_cross"]["amplitude"]
-el_co = port_s1["el_co"]["amplitude"]
+az_co = port_s1["AZ T0 CO"]["amplitude"]
+az_cr = port_s1["AZ T0 CR"]["amplitude"]
+el_co = port_s1["EL T0 CO"]["amplitude"]
 
 # convert pandas string values to float values
 az_co = az_co.convert_objects(convert_numeric=True)
@@ -68,14 +71,16 @@ az_cr = az_cr.convert_objects(convert_numeric=True)
 el_co = el_co.convert_objects(convert_numeric=True)
 
 #Generate summary table for data    
-Results = results_table(az_co,az_cr,el_co)  
+results = results_table(az_co,az_cr,el_co)  
+#Round down Results
+results=results.round(2)
 #Save data to a CSV
-#Results.to_csv('P1 results.csv')
+results.to_csv('P1_results.csv')
 
-#Cart Plot
-plot_norm_cart(az_co,az_cr)
-plot_norm_polar(az_co,az_cr)
-
-#writer = pd.ExcelWriter('output.xlsx')
-#Results.to_excel(writer,'Sheet1')
-#writer.save()
+#Generate and Save Plots
+#Cart
+plot_norm_cart(az_co,az_cr,fname="P1 AZ Cart")
+plot_norm_cart(el_co,el_co,fname="P1 EL Cart")
+#Polar
+plot_norm_polar(az_co,az_cr,fname="P1 AZ Polar")
+plot_norm_polar(el_co,el_co,fname="P1 EL Polar")

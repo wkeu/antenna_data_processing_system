@@ -77,7 +77,7 @@ def front_to_back(co):
 #
 ###############################################################################
 
-#TODO: aDD COMMENT
+#Function to find the index of the nearest value in an array
 def find_nearest(array,value):
     idx = (np.abs(array-value)).argmin()
     return idx
@@ -122,7 +122,7 @@ def find_3db_intersection_angles(wave_str):
 
 
 #Function to find the 3db beamwidths for a given graph
-def find_3db_bw(az_co):
+def find_3db_bw(az_co, measurement_type="3db Beamwidth"):
     
     #Collect keys    
     key_list=az_co.keys()
@@ -135,8 +135,9 @@ def find_3db_bw(az_co):
         lowwer_angle, upper_angle =find_3db_intersection_angles(az_co[i])
         #Calculate 3db bw
         bw_3db.append( np.abs(lowwer_angle-upper_angle) )
-       
-    bw_3db_pd=pd.DataFrame({"3db Beamwidth":bw_3db,"index":key_list})
+    
+    #Format into a data frame
+    bw_3db_pd=pd.DataFrame({measurement_type:bw_3db,"index":key_list})
     bw_3db_pd=bw_3db_pd.set_index('index') 
             
     return bw_3db_pd
@@ -272,6 +273,15 @@ def calc_usl_in_range(wave,angle_range=180):
     if usl<0:
         print("Warning: Check USL Value")
     
+    #TODO: Make this a bit more sophisticated. Its a bit hacky
+    if np.isnan(usl):
+        print("failed to find usl in range")
+        
+        peak_lobe_itx = peak_angle-angle_range
+        print(peak_lobe_itx)
+        usl=peak_amp-wave[int(peak_lobe_itx)]
+        print (usl) 
+    
     return usl
 
 #Calulate the USL for a table with a given angle range
@@ -288,8 +298,8 @@ def find_usl_in_range(el_co,angle_range=180):
         #Add usl to list for given column
         usl_in_range.append(    calc_usl_in_range(el_co[i],angle_range)     )
     
-    #Format
-    usl_pd=pd.DataFrame({"USL in ra":usl_in_range,"index":key_list})
+    #Format into a dataframe
+    usl_pd=pd.DataFrame({"USL in Range":usl_in_range,"index":key_list})
     usl_pd=usl_pd.set_index('index')
         
     return usl_pd    
