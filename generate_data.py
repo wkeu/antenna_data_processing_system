@@ -58,7 +58,7 @@ def results_table(az_co,az_cr,el_co):
 #import data
 #Alternatively we can use sub dir=\\raw_data\\
 all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_3\\"     )
-port_s1=all_ports["P2"]
+port_s1=all_ports["P1"]
 
 # define dataframe pages
 az_co = port_s1["AZ T0 CO"]["amplitude"]

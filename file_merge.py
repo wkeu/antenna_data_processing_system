@@ -113,7 +113,7 @@ def get_file_names_in_dir(path):
     
     #This might be needed at a later date. It creates a dict with all ports 
     # and tilts
-    """ 
+    
     #Find all of ports
     port_idx=4
     all_ports=panda[port_idx]
@@ -125,7 +125,7 @@ def get_file_names_in_dir(path):
     all_tilts=panda[tilt_idx]
     all_tilts=all_tilts.drop_duplicates()
     number_of_tilts=len(all_tilts)
-    """
+    
      
     #Organise panda into a dictionary for each port 
     n_ports = dict()    
