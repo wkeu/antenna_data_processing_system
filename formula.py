@@ -273,12 +273,10 @@ def calc_usl_in_range(wave,angle_range=20):
 
     if usl<0:
         print("Warning: Check USL Value")
-<<<<<<< HEAD
+
     
     #TODO: Make this a bit more sophisticated. Its a bit hacky
-=======
-        
->>>>>>> fbd7d9fb656c2d68a2ff0af724d42de6ad8116b2
+
     if np.isnan(usl):
         print("failed to find usl in range")
         
@@ -286,11 +284,7 @@ def calc_usl_in_range(wave,angle_range=20):
         print(peak_lobe_itx)
         usl=peak_amp-wave[int(peak_lobe_itx)]
         print (usl) 
-<<<<<<< HEAD
-    
-=======
-        
->>>>>>> fbd7d9fb656c2d68a2ff0af724d42de6ad8116b2
+
     return usl
 
 #Calulate the USL for a table with a given angle range

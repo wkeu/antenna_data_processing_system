@@ -76,7 +76,7 @@ def calulated_based_per_port(port_s1,port_name):
     #Round down Results
     
     #Save data to a CSV
-    results.to_csv(  port_name+"results.csv" )
+    results.to_csv(  port_name+" results.csv" )
     
     #Generate and Save Plots
     #Cart
@@ -94,18 +94,9 @@ def calulated_based_per_port(port_s1,port_name):
 #
 ###############################################################################
 
-<<<<<<< HEAD
 #import data
 #Alternatively we can use sub dir=\\raw_data\\
 all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_1\\"     )
-=======
-#Cart Plot
-plot_norm_cart(az_co,az_cr,fname="P1 AZ Cart")
-plot_norm_cart(el_co,el_co,fname="P1 EL Cart")
-plot_norm_polar(az_co,az_cr,fname="P1 AZ Polar")
-plot_norm_polar(el_co,el_co,fname="P1 EL Polar")
-#
->>>>>>> fbd7d9fb656c2d68a2ff0af724d42de6ad8116b2
 
 for port_name in all_ports:
     calulated_based_per_port(all_ports[port_name],port_name)
