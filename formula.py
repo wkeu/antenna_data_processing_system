@@ -252,7 +252,6 @@ def find_first_usl(el_co):
     
 #Finds the difference in amplitude between largest side lobe and peaks over a 
 #certain frequency range. By default 180 degrees away from the peak. 
-def calc_usl_in_range(wave,angle_range=180):
 def calc_usl_in_range(wave,angle_range=20):
     
     #Find the peaks and troughs
@@ -274,8 +273,12 @@ def calc_usl_in_range(wave,angle_range=20):
 
     if usl<0:
         print("Warning: Check USL Value")
+<<<<<<< HEAD
     
     #TODO: Make this a bit more sophisticated. Its a bit hacky
+=======
+        
+>>>>>>> fbd7d9fb656c2d68a2ff0af724d42de6ad8116b2
     if np.isnan(usl):
         print("failed to find usl in range")
         
@@ -283,11 +286,14 @@ def calc_usl_in_range(wave,angle_range=20):
         print(peak_lobe_itx)
         usl=peak_amp-wave[int(peak_lobe_itx)]
         print (usl) 
+<<<<<<< HEAD
     
+=======
+        
+>>>>>>> fbd7d9fb656c2d68a2ff0af724d42de6ad8116b2
     return usl
 
 #Calulate the USL for a table with a given angle range
-def find_usl_in_range(el_co,angle_range=180):
 def find_usl_in_range(el_co,angle_range=20):
 
     #Convert the data so that it is stored in a more appropriate format
