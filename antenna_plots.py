@@ -43,12 +43,12 @@ def plot_norm_cart(az_co,az_cr,fname):
     ax1.yaxis.set_major_locator(ticker.MultipleLocator(y_tick_spacing))
    
     #Set Plot title & axis titles
-    ax1.set_title('P1 Azimuth')
+    ax1.set_title(fname)
     ax1.set_ylabel('dBi')
     ax1.set_xlabel('Angle')
    
     #Add legends
-    legend1 = ax1.legend(headers_az_co,fancybox = True, framealpha=0.75,title='freq',prop={'size':10})
+    legend1 = ax1.legend(headers_az_co,fancybox = True, bbox_to_anchor=(1.05, 1),framealpha=0.75,title='freq',prop={'size':10})
  
     ax1.add_artist(legend1)
 
@@ -76,6 +76,7 @@ def plot_norm_polar(az_co,az_cr,fname):
     #Create plot
     fig2 = plt.figure(figsize=[13,7])
     ax2 = fig2.add_subplot(111,projection='polar')
+    ax2.set_title(fname)
     ax2.plot(angle_rad, normalised_az,linewidth=0.75,alpha=0.5)
     ax2.grid(alpha=0.25) #Set transparency of grid to 25%
     ax2.set_ylim([-40,0])
