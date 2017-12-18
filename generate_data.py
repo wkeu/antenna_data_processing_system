@@ -71,7 +71,8 @@ el_co = el_co.convert_objects(convert_numeric=True)
 #Generate summary table for data    
 Results = results_table(az_co,az_cr,el_co)  
 #Save data to a CSV
-#Results.to_csv('P1 results.csv')
+
+Results.to_csv('P1 results.csv')
 
 #Cart Plot
 plot_norm_cart(az_co,az_cr,fname="P1 AZ Cart")
