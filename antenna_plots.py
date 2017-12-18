@@ -31,7 +31,7 @@ def plot_norm_cart(az_co,az_cr,fname):
     #Create plot
     fig1 = plt.figure(figsize=[13,7])
     ax1 = fig1.add_subplot(111)
-    ax1.plot(normalised_az,linewidth=0.75)  
+    ax1.plot(normalised_az,linewidth=0.75,alpha=0.5)  
     
     #Set axis parameters
     ax1.grid(alpha=0.25)
@@ -44,12 +44,14 @@ def plot_norm_cart(az_co,az_cr,fname):
    
     #Set Plot title & axis titles
     ax1.set_title('P2 Azimuth')
+
+    ax1.set_title(fname)
+
     ax1.set_ylabel('dBi')
     ax1.set_xlabel('Angle')
    
     #Add legends
-    legend1 = ax1.legend(headers_az_co,fancybox = True, framealpha=0.5,title='freq',prop={'size':10})
- 
+    legend1 = ax1.legend(headers_az_co,fancybox = True, bbox_to_anchor=(1.05, 1),framealpha=0.75,title='freq',prop={'size':10})
     ax1.add_artist(legend1)
 
     #Export Plot
@@ -62,21 +64,26 @@ def plot_norm_polar(az_co,az_cr,fname):
     plt.ioff()
     #Normalise
     normalised_az = normalise(az_co,az_cr)
+
+    #Add roll around
+    normalised_az=pd.concat([normalised_az,normalised_az.loc[[0]]])
     
     #Get Freq list of column headers
     headers_az_co = list(az_co.dtypes.index)
 
     #isolate wave 
-    angle_deg=np.arange(0,360,1)
+    angle_deg=np.arange(0,361,1)
     angle_rad=np.deg2rad(angle_deg)
 
     #Create plot
     fig2 = plt.figure(figsize=[13,7])
     ax2 = fig2.add_subplot(111,projection='polar')
-    ax2.plot(angle_rad, normalised_az,linewidth=0.75)
+    ax2.set_title(fname)
+    ax2.plot(angle_rad, normalised_az,linewidth=0.75,alpha=0.5)
     ax2.grid(alpha=0.25) #Set transparency of grid to 25%
     ax2.set_ylim([-40,0])
     legend1 = ax2.legend(headers_az_co, bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.5,title='freq',prop={'size':10})
+
 
     ax2.add_artist(legend1)
 

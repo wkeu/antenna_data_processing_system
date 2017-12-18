@@ -27,6 +27,8 @@ TODO:
 import pandas as pd
 import os
 import pickle
+import numpy as np
+
 
 #function to read in an ascii test file and generate a dictionary. Which 
 #contains the amplitude and phase tables for a particular measurment.  
@@ -84,26 +86,93 @@ def read_to_panda(f_name):
         
     return data_frame_amp_phase
 
+
+#Function to automatically ananlise directory and determine all the files in the 
+# directory and which port that they belong in.
+
+#TODO:Error checks for the fdir
+    #Different model
+    #Naming convention wrong
+    #Different lenghts
+    #Differnt number of measurments per port
+def get_file_names_in_dir(path):
+
+    all_files=os.listdir(path) #All files in directory
+    
+    #Tokenize file names into a list
+    all_files_tokenized=list()
+    
+    for line in all_files:
+        line = line.strip()
+        if len(line) > 0:
+            words = line.split(" ")
+            all_files_tokenized.append(words)
+    
+    #Put into a data frame
+    panda=pd.DataFrame(all_files_tokenized)
+    
+    #This might be needed at a later date. It creates a dict with all ports 
+    # and tilts
+    
+    #Find all of ports
+    port_idx=4
+    all_ports=panda[port_idx]
+    all_ports=all_ports.drop_duplicates()
+    number_of_ports=len(all_ports)
+    
+    #Find the number of the tilts
+    tilt_idx=6
+    all_tilts=panda[tilt_idx]
+    all_tilts=all_tilts.drop_duplicates()
+    number_of_tilts=len(all_tilts)
+    
+     
+    #Organise panda into a dictionary for each port 
+    n_ports = dict()    
+    for i in all_ports:
+        n_ports[i] = panda[panda[port_idx] == i]
+    
+    #Edit all elements in the dictionary so that they are a string and change index 
+    for i in all_ports:
+        #Isolate port measurment
+        pn=n_ports[i]
+        #Create index
+        pn_index=pn[7] + " " + pn[6] + " " + pn[8]
+        
+        #Merge all strings into one
+        pn=pn[np.arange(0,len(n_ports[i].columns))].apply(lambda x: ' '.join(x), axis=1) 
+        
+        #Change the index
+        frame=[pn,pn_index]
+        pn = pd.concat(frame,axis=1)
+        pn=pn.set_index(pn[1])
+        pn=dict(pn[0])
+    
+        #Update n_ports
+        n_ports[i] = pn 
+
+    return n_ports
+
 #Function to read in data for one port
-def read_in_port_data():
-    #File names    
-    fname_az_copolar="OD AW3645 V1 R1 P1 N45 AZ CO PATT.txt"
-    fname_az_cross="OD AW3645 V1 R1 P1 P45 AZ CR PATT.txt"
-    fname_el_copolar="OD AW3645 V1 R1 P1 N45 EL CO PATT.txt"
 
-    #Setting up path to subdir
-    sub_dir = "\\RAW_DATA\\RAW_DATA\\"
+#Function to read in data for one port
+def read_in_data_all_ports(sub_dir):
+    
     path=os.getcwd()+sub_dir
+    f_names=get_file_names_in_dir(path)
 
-    #Read in each file
-    az_co=read_to_panda(path+fname_az_copolar)
-    az_cross=read_to_panda(path+fname_az_cross)
-    el_co=read_to_panda(path+fname_el_copolar)
+    #Copy fnames for storing data
+    data=f_names
 
-    #Put all measurments into a dict
-    p1_data={"az_co":az_co,"az_cross":az_cross,"el_co":el_co}
+    #Nested loop for reading in each file
+    for port in f_names:
+        print(port)
+        for file in f_names[port].keys():
+            print(file)
+            #print("\t"+f_names[port][file])
+            data[port][file]=read_to_panda(path+f_names[port][file])
 
     #dump the data
     #pickle.dump( p1_data, open( "p1_data.p", "wb" ) )
 
-    return p1_data
+    return data

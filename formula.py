@@ -77,7 +77,7 @@ def front_to_back(co):
 #
 ###############################################################################
 
-#TODO: aDD COMMENT
+#Function to find the index of the nearest value in an array
 def find_nearest(array,value):
     idx = (np.abs(array-value)).argmin()
     return idx
@@ -271,6 +271,7 @@ def calc_usl_in_range(wave,angle_range=0):
     #difference in amp
     usl=peak_amp-peak_sl_amp
 
+
 #    if usl<0:
 #        print("Warning: Check USL Value")
         
@@ -282,6 +283,22 @@ def calc_usl_in_range(wave,angle_range=0):
 #        usl=peak_amp-wave[int(peak_lobe_itx)]
 #        print (usl) 
         
+
+    if usl<0:
+        print("Warning: Check USL Value")
+
+    
+    #TODO: Make this a bit more sophisticated. Its a bit hacky
+
+    if np.isnan(usl):
+        print("failed to find usl in range")
+        
+        peak_lobe_itx = peak_angle-angle_range
+        print(peak_lobe_itx)
+        usl=peak_amp-wave[int(peak_lobe_itx)]
+        print (usl) 
+
+
     return usl
 
 #Calulate the USL for a table with a given angle range
@@ -298,8 +315,8 @@ def find_usl_in_range(el_co,angle_range=20):
         #Add usl to list for given column
         usl_in_range.append(    calc_usl_in_range(el_co[i],angle_range)     )
     
-    #Format
-    usl_pd=pd.DataFrame({"USL in ra":usl_in_range,"index":key_list})
+    #Format into a dataframe
+    usl_pd=pd.DataFrame({"USL in Range":usl_in_range,"index":key_list})
     usl_pd=usl_pd.set_index('index')
         
     return usl_pd    
