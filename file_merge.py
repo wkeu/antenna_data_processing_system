@@ -122,11 +122,11 @@ def get_file_names_in_dir(path):
     
     #Find the number of the tilts
     tilt_idx=6
+    
     all_tilts=panda[tilt_idx]
     all_tilts=all_tilts.drop_duplicates()
     number_of_tilts=len(all_tilts)
     
-     
     #Organise panda into a dictionary for each port 
     n_ports = dict()    
     for i in all_ports:
@@ -137,7 +137,7 @@ def get_file_names_in_dir(path):
         #Isolate port measurment
         pn=n_ports[i]
         #Create index
-        pn_index=pn[7] + " " + pn[6] + " " + pn[8]
+        pn_index=pn[7] + " " + pn[tilt_idx] + " " + pn[8]
         
         #Merge all strings into one
         pn=pn[np.arange(0,len(n_ports[i].columns))].apply(lambda x: ' '.join(x), axis=1) 

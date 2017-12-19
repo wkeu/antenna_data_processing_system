@@ -9,6 +9,14 @@ import numpy as np
 import pandas as pd
 from scipy.signal import savgol_filter
 from peakdetect import peakdetect
+
+##############################################################################
+#
+#   Global Variables
+#
+##############################################################################
+BORESIGHT = 180
+
 ###############################################################################
 #
 #   Find Peak amplitude & angle
@@ -40,8 +48,7 @@ def normalise(co,cr):
 #
 ###############################################################################
 def sector_xpol(co,cr):
-    sector = 180 # define sector as 180
-    xpol_at_sector = co.iloc[sector] - cr.iloc[sector] # co at sector - cr at sector
+    xpol_at_sector = co.iloc[BORESIGHT] - cr.iloc[BORESIGHT] # co at sector - cr at sector
     xpol_at_sector = xpol_at_sector.to_frame()
     xpol_at_sector.columns = ['X Pol at sector']
     return xpol_at_sector
@@ -52,9 +59,8 @@ def sector_xpol(co,cr):
 #
 ###############################################################################
 def front_to_back(co):
-    sector = 180                                                                        # define sector angle
-    back_sight1 = sector - 180                                                          # define the backsight(back of antenna). eg 0 & 360 degrees
-    back_sight2 = sector + 180
+    back_sight1 = BORESIGHT - 180                                                          # define the backsight(back of antenna). eg 0 & 360 degrees
+    back_sight2 = BORESIGHT + 180
     fbr_range = 30                                                                      # define +/- range to check for FBR
 
     fbr_search1 = back_sight1 + (fbr_range+1)                                           # this is search range 1 eg 0 - 30 degrees
@@ -66,9 +72,13 @@ def front_to_back(co):
 
     # Output#
     az_peak_amp = co.max()      
-    fbr = az_peak_amp - fbr_max.max()                                                   # Find fbr = az peak - peak value in search range
-    fbr = fbr.to_frame()
-    fbr.columns = ['Front to Back Ratio']
+    
+    fbr = az_peak_amp - fbr_max.max()   
+    fbr_pos = fbr_max.idxmax()
+    fbr=pd.concat([fbr,fbr_pos],axis = 1)
+
+    fbr.columns = ['Front to Back Ratio','@ Angle']
+
     return fbr
 
 ###############################################################################
@@ -154,16 +164,19 @@ def find_squint(az_co):
     key_list=az_co.keys()
     #Initalise list
     sqt=list()
+    midpoint=list()
     
     #Cycle through each frequency column
     for i in key_list:
         #Work with each column individually 
         lowwer_angle, upper_angle =find_3db_intersection_angles(az_co[i])
         #Culculate squint
-        x = cal_squint(lowwer_angle,upper_angle)
+        x , y = cal_squint(lowwer_angle,upper_angle)
         sqt.append( x )
+        midpoint.append( y )
     
-    sqt_pd=pd.DataFrame({"Squint":sqt,"index":key_list})
+    sqt_pd=pd.DataFrame({"Squint of 3dB Midpoint":sqt,"  @ Angle":midpoint,"index":key_list})
+    sqt_pd=sqt_pd.reindex(columns=["Squint of 3dB Midpoint","  @ Angle","index"])
     sqt_pd=sqt_pd.set_index('index') 
     return sqt_pd
     
@@ -171,9 +184,92 @@ def find_squint(az_co):
 #function to calculate squint. Inputs are 3db intersection points
 def cal_squint(r_int,l_int):
     midpoint=(r_int+l_int)/2.0
-    boresight=180.0 #this is our ideal value 
-    squint=midpoint-boresight
-    return squint
+    squint=abs(midpoint-BORESIGHT)
+
+    return squint, midpoint
+
+###############################################################################
+#
+#   Squint @ Peak
+#
+###############################################################################
+def peak_squint(az_co):
+    az_peak = az_co.max()
+    peak_pos = az_co.idxmax()
+    peak = pd.concat([az_peak,peak_pos],axis = 1)
+
+    peak_squint = abs(peak_pos - BORESIGHT)
+    peak_squint = pd.concat([peak_squint,peak_pos],axis = 1)
+    peak_squint.columns = (['Squint of Peak','@ Angle'])
+
+    return peak_squint
+    
+###############################################################################
+#
+#   Tilt deviation @ Peak
+#
+###############################################################################
+    
+#Function to extract the tilt from fname         
+def find_tilt(fname): 
+    a=fname.split()
+    
+    for b in a:
+        if "T" in b:
+            _,tilt_angle=b.split("T")
+        
+    return float(tilt_angle)
+
+##############################################################################
+
+def peak_tilt_dev(el_co,fname):
+    ant_tilt = find_tilt(fname)
+    el_peak = el_co.max()
+    peak_pos = el_co.idxmax()
+    peak = pd.concat([el_peak,peak_pos],axis = 1)
+
+    peak_tilt_deviation = abs(peak_pos - (ant_tilt+BORESIGHT))
+    peak_tilt_deviation = pd.concat([peak_tilt_deviation,peak_pos],axis = 1)
+    peak_tilt_deviation.columns = (['Tilt dev of Peak','@ Angle'])
+
+    return peak_tilt_deviation
+
+
+###############################################################################
+#
+#   Tilt Deviation of 3dB midpoint calculation 
+#
+###############################################################################
+
+def find_tilt_dev(el_co,fname):
+    #Collect keys
+    key_list=el_co.keys()
+    #Initalise list
+    dev=list()
+    midpoint=list()
+    ant_tilt = find_tilt(fname)
+    #Cycle through each frequency column
+    for i in key_list:
+        #Work with each column individually 
+        lowwer_angle, upper_angle =find_3db_intersection_angles(el_co[i])
+        #Culculate squint
+        x , y = cal_dev(lowwer_angle,upper_angle,ant_tilt)
+        dev.append( x )
+        midpoint.append( y )
+    
+    dev_pd=pd.DataFrame({"Tilt Deviation of 3dB Midpoint":dev,"  @ Angle":midpoint,"index":key_list})
+    dev_pd=dev_pd.reindex(columns=["Tilt Deviation of 3dB Midpoint","  @ Angle","index"])
+    dev_pd=dev_pd.set_index('index') 
+    return dev_pd
+    
+
+#function to calculate squint. Inputs are 3db intersection points
+def cal_dev(r_int,l_int,ant_tilt):
+    midpoint=(r_int+l_int)/2.0
+    tilt=(BORESIGHT + ant_tilt) #this is our ideal value 
+    deviation=abs(midpoint-tilt)
+    
+    return deviation,midpoint
 
 ###############################################################################
 #
@@ -222,8 +318,7 @@ def cal_first_usl(wave):
 
 
 #Calulate the 1st USL for a table
-def find_first_usl(el_co):
-    #Convert the data so that it is stored in a more appropriate format
+def find_first_usl(el_co, measurement_type):    #Convert the data so that it is stored in a more appropriate format
     el_co = el_co.convert_objects(convert_numeric=True)    
     
     #Take column index into array 
@@ -235,7 +330,7 @@ def find_first_usl(el_co):
         first_usl.append(cal_first_usl(el_co[i]))
         
     #Format to panda
-    first_usl_pd=pd.DataFrame({"1st USL":first_usl,"index":key_list})
+    first_usl_pd=pd.DataFrame({measurement_type:first_usl,"index":key_list})
     first_usl_pd=first_usl_pd.set_index('index')   
         
     return first_usl_pd
@@ -252,7 +347,7 @@ def find_first_usl(el_co):
     
 #Finds the difference in amplitude between largest side lobe and peaks over a 
 #certain frequency range. By default 180 degrees away from the peak. 
-def calc_usl_in_range(wave,angle_range=20):
+def calc_usl_in_range(wave,angle_range=0):
     
     #Find the peaks and troughs
     df_peaks = find_peaks( wave )
@@ -274,7 +369,6 @@ def calc_usl_in_range(wave,angle_range=20):
     if usl<0:
         print("Warning: Check USL Value")
 
-    
     #TODO: Make this a bit more sophisticated. Its a bit hacky
 
     if np.isnan(usl):
@@ -288,7 +382,7 @@ def calc_usl_in_range(wave,angle_range=20):
     return usl
 
 #Calulate the USL for a table with a given angle range
-def find_usl_in_range(el_co,angle_range=20):
+def find_usl_in_range(el_co,measurement_type,angle_range=20):
 
     #Convert the data so that it is stored in a more appropriate format
     el_co = el_co.convert_objects(convert_numeric=True)    
@@ -302,7 +396,7 @@ def find_usl_in_range(el_co,angle_range=20):
         usl_in_range.append(    calc_usl_in_range(el_co[i],angle_range)     )
     
     #Format into a dataframe
-    usl_pd=pd.DataFrame({"USL in Range":usl_in_range,"index":key_list})
+    usl_pd=pd.DataFrame({measurement_type:usl_in_range,"index":key_list})
     usl_pd=usl_pd.set_index('index')
         
     return usl_pd    

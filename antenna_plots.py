@@ -17,7 +17,10 @@ import numpy as np
 ###############################################################################
 
 #Cartisian plot of normalised test data
-def plot_norm_cart(az_co,az_cr,fname):
+def plot_norm_cart(az_co,az_cr,fname,save_dir):
+    
+    az_co = az_co.convert_objects(convert_numeric=True)
+    az_cr = az_cr.convert_objects(convert_numeric=True)
     
     #Turn off plot so that it only saves it and dosnt show it
     plt.ioff() 
@@ -48,15 +51,19 @@ def plot_norm_cart(az_co,az_cr,fname):
     ax1.set_xlabel('Angle')
    
     #Add legends
-    legend1 = ax1.legend(headers_az_co,fancybox = True, bbox_to_anchor=(1.05, 1),framealpha=0.75,title='freq',prop={'size':10})
+    legend1 = ax1.legend(headers_az_co,fancybox = True, loc=1, bbox_to_anchor=(1.1, 1.05),framealpha=0.75,title='freq',prop={'size':10})
     ax1.add_artist(legend1)
 
     #Export Plot
-    plt.savefig(fname+'.png', dpi=600)  
+    plt.savefig(save_dir+fname+'.png', dpi=600)     
+    plt.close('all')  
     plt.ion() 
     
 #Polar plot of normalised test data    
-def plot_norm_polar(az_co,az_cr,fname):
+def plot_norm_polar(az_co,az_cr,fname,save_dir):
+    
+    az_co = az_co.convert_objects(convert_numeric=True)
+    az_cr = az_cr.convert_objects(convert_numeric=True)
     
     plt.ioff()
     #Normalise
@@ -84,6 +91,7 @@ def plot_norm_polar(az_co,az_cr,fname):
 
     ax2.add_artist(legend1)
 
-    plt.savefig(fname+'.png', dpi=600) 
+    plt.savefig(save_dir+fname+'.png', dpi=600) 
+    plt.close('all')
     plt.ion() 
     
