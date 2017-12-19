@@ -379,6 +379,7 @@ def calc_usl_in_range(wave,angle_range=0):
         usl=peak_amp-wave[int(peak_lobe_itx)]
         print (usl) 
 
+
     return usl
 
 #Calulate the USL for a table with a given angle range

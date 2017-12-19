@@ -46,7 +46,10 @@ def plot_norm_cart(az_co,az_cr,fname,save_dir):
     ax1.yaxis.set_major_locator(ticker.MultipleLocator(y_tick_spacing))
    
     #Set Plot title & axis titles
+    ax1.set_title('P2 Azimuth')
+
     ax1.set_title(fname)
+
     ax1.set_ylabel('dBi')
     ax1.set_xlabel('Angle')
    

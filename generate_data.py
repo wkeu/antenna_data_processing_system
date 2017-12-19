@@ -97,7 +97,6 @@ def results_final(az_results_table,el_results_table,port_name,save_dir):
 #tables for az calculations and then el calculations. It the merges and returns 
 #results table.     
 def calulated_based_per_port(P1,port_name,save_dir):
-    
     P1=dict(P1) #Keep this! Ensures a copy was made.
     
     ###############################################################################
