@@ -56,13 +56,14 @@ def results_table_el(el_co,fname="EL TX"):
     
     el_bw_3db = find_3db_bw(el_co,"3db BW "+fname)
     first_usl= find_first_usl(el_co,"first_usl "+fname)
-    usl_range= find_usl_in_range(el_co,measurement_type="usl_range "+fname)
+    usl_range = find_usl_in_range(el_co,measurement_type="usl_range "+fname)
+    usl_range_bs = find_usl_in_range(el_co, measurement_type="usl_range bs"+fname, Boresight=True)
     peak_dev = peak_tilt_dev(el_co,fname)
     tilt_dev = find_tilt_dev(el_co,fname)    
     
     #Put into a dataframe
     results = pd.DataFrame()
-    results = pd.concat([el_bw_3db,first_usl,usl_range,peak_dev,tilt_dev],axis = 1)
+    results = pd.concat([el_bw_3db,first_usl,usl_range,usl_range_bs,peak_dev,tilt_dev],axis = 1)
     
     return results
 
@@ -153,6 +154,9 @@ def calulated_based_per_port(P1,port_name,save_dir):
 
 #import data
 #Alternatively we can use sub dir=\\raw_data\\
+
+"""
+
 all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_2\\"     )
 save_dir= "\\processed_data\\"
 save_path=os.getcwd()+save_dir
@@ -170,4 +174,4 @@ for port_name in all_ports:
 print("o.O.o")
 
 
-
+"""

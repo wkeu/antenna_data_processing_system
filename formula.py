@@ -42,6 +42,12 @@ def normalise(co,cr):
     normalised_az = pd.concat([normalise_co,normalise_cr], axis = 1)
     return normalised_az
 
+def normalise2(co,cr):
+    az_peak_amp = co.max()      
+    normalise_co = co - az_peak_amp
+    normalise_cr = cr - az_peak_amp
+    return normalise_co,normalise_cr
+
 ###############################################################################
 #
 #   Azimuth Cross Polar Discrimiation @ sector
@@ -310,11 +316,12 @@ def cal_first_usl(wave):
     idx_max=df_peaks.idxmax()
 
     #find amp of peak and 1st usl 
-    amp_of_peak=df_peaks["amp"][idx_max["amp"]]
-    amp_of_1stlobe=df_peaks["amp"][idx_max["amp"]-1]
+    amp_of_peak = df_peaks["amp"][idx_max["amp"]]
+    amp_of_1stlobe = df_peaks["amp"][idx_max["amp"]-1]
+    fst_usl_angle = df_peaks["angle"][idx_max["amp"]-1]
     first_usl=amp_of_peak-amp_of_1stlobe
     
-    return first_usl
+    return first_usl, fst_usl_angle
 
 
 #Calulate the 1st USL for a table
@@ -324,13 +331,16 @@ def find_first_usl(el_co, measurement_type):    #Convert the data so that it is 
     #Take column index into array 
     key_list=el_co.keys()
     first_usl=list()
+    first_usl_angle=list()
 
     for i in key_list:
         #Add usl to list for given column
-        first_usl.append(cal_first_usl(el_co[i]))
+        usl, angle = cal_first_usl(el_co[i])
+        first_usl.append(usl)
+        first_usl_angle.append(angle)
         
     #Format to panda
-    first_usl_pd=pd.DataFrame({measurement_type:first_usl,"index":key_list})
+    first_usl_pd=pd.DataFrame({measurement_type:first_usl,"@ Angle":first_usl_angle ,"index":key_list})
     first_usl_pd=first_usl_pd.set_index('index')   
         
     return first_usl_pd
@@ -347,7 +357,7 @@ def find_first_usl(el_co, measurement_type):    #Convert the data so that it is 
     
 #Finds the difference in amplitude between largest side lobe and peaks over a 
 #certain frequency range. By default 180 degrees away from the peak. 
-def calc_usl_in_range(wave,angle_range=0):
+def calc_usl_in_range(wave,angle_range=30,Boresight=False):
     
     #Find the peaks and troughs
     df_peaks = find_peaks( wave )
@@ -357,47 +367,55 @@ def calc_usl_in_range(wave,angle_range=0):
     _,peak_idx=df_peaks.idxmax()
     peak_angle=df_peaks["angle"][peak_idx]
     
+    #For using boresight instead of peak angle
+    if Boresight:
+        peak_angle=BORESIGHT
+        
     #Remove all values not in range 
     df_peaks = df_peaks[(df_peaks.angle < peak_angle) & (df_peaks.angle > peak_angle-angle_range)  ]
     
     #find the peak of largest side lobe in range
     _,peak_sl_amp=df_peaks.max()
     
-    #difference in amp
-    usl=peak_amp-peak_sl_amp
-
-    if usl<0:
-        print("Warning: Check USL Value")
+    #if a peak has been detected 
+    if not(df_peaks.empty):
+        usl_angle_idx=df_peaks["amp"].idxmax()
+        usl_peak_angle=float(df_peaks["angle"].loc[[usl_angle_idx]])
+    
+        #difference in amp
+        usl=peak_amp-peak_sl_amp
 
     #TODO: Make this a bit more sophisticated. Its a bit hacky
+    #No peak detected
+    else:
+        print("Warning: failed to find usl in range ....")
+        print("search_range_is:"+str(angle_range))
+        usl_peak_angle = peak_angle-angle_range
+        usl=peak_amp-wave[int(usl_peak_angle)]
 
-    if np.isnan(usl):
-        print("failed to find usl in range")
-        
-        peak_lobe_itx = peak_angle-angle_range
-        print(peak_lobe_itx)
-        usl=peak_amp-wave[int(peak_lobe_itx)]
-        print (usl) 
-
-
-    return usl
+    return usl, usl_peak_angle
 
 #Calulate the USL for a table with a given angle range
-def find_usl_in_range(el_co,measurement_type,angle_range=20):
+def find_usl_in_range(el_co, measurement_type,angle_range=20, Boresight=False):
 
+    #TODO, Set up if boresight=True
+    
     #Convert the data so that it is stored in a more appropriate format
     el_co = el_co.convert_objects(convert_numeric=True)    
     
     #Take column index into array 
     key_list=el_co.keys()
     usl_in_range=list()
+    usl_angle_in_range=list()
 
     for i in key_list:
         #Add usl to list for given column
-        usl_in_range.append(    calc_usl_in_range(el_co[i],angle_range)     )
+        usl,usl_angle = calc_usl_in_range(el_co[i],angle_range,Boresight)
+        usl_in_range.append(     usl    )
+        usl_angle_in_range.append(     usl_angle    )
     
     #Format into a dataframe
-    usl_pd=pd.DataFrame({measurement_type:usl_in_range,"index":key_list})
+    usl_pd=pd.DataFrame({measurement_type:usl_in_range,"@ Angle":usl_angle_in_range,"index":key_list})
     usl_pd=usl_pd.set_index('index')
         
     return usl_pd    
