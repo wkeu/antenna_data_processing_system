@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec 27 15:35:04 2017
+Created on Tue Jan  2 09:20:52 2018
 
 @author: matt.slevin
 """
@@ -59,4 +59,3 @@ with open("my_new_file.html", "wb") as fh:
 #   Templating
 #
 ###############################################################################
-
