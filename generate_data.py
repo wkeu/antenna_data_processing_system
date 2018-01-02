@@ -155,9 +155,7 @@ def calulated_based_per_port(P1,port_name,save_dir):
 #import data
 #Alternatively we can use sub dir=\\raw_data\\
 
-"""
-
-all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_2\\"     )
+all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_1\\"     )
 save_dir= "\\processed_data\\"
 save_path=os.getcwd()+save_dir
 #os.makedirs(save_dir)
@@ -174,4 +172,3 @@ for port_name in all_ports:
 print("o.O.o")
 
 
-"""

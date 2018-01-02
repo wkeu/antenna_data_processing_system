@@ -12,10 +12,13 @@ from peakdetect import peakdetect
 
 ##############################################################################
 #
-#   Global Variables
+#   Glpbal Variables
 #
 ##############################################################################
-BORESIGHT = 180
+BORESIGHT = 180             #Specify boresight angle
+USL_SEARCH_RANGE = 20       #Specify range frm Main lobe to search for USL
+
+
 
 ###############################################################################
 #
@@ -42,18 +45,13 @@ def normalise(co,cr):
     normalised_az = pd.concat([normalise_co,normalise_cr], axis = 1)
     return normalised_az
 
-def normalise2(co,cr):
-    az_peak_amp = co.max()      
-    normalise_co = co - az_peak_amp
-    normalise_cr = cr - az_peak_amp
-    return normalise_co,normalise_cr
-
 ###############################################################################
 #
 #   Azimuth Cross Polar Discrimiation @ sector
 #
 ###############################################################################
 def sector_xpol(co,cr):
+    
     xpol_at_sector = co.iloc[BORESIGHT] - cr.iloc[BORESIGHT] # co at sector - cr at sector
     xpol_at_sector = xpol_at_sector.to_frame()
     xpol_at_sector.columns = ['X Pol at sector']
@@ -65,6 +63,7 @@ def sector_xpol(co,cr):
 #
 ###############################################################################
 def front_to_back(co):
+                                                                           # define sector angle
     back_sight1 = BORESIGHT - 180                                                          # define the backsight(back of antenna). eg 0 & 360 degrees
     back_sight2 = BORESIGHT + 180
     fbr_range = 30                                                                      # define +/- range to check for FBR
@@ -77,14 +76,13 @@ def front_to_back(co):
     fbr_max = pd.concat([fbr1,fbr2], axis = 0)                                          # join fbr1 & fbr2
 
     # Output#
-    az_peak_amp = co.max()      
-    
+    az_peak_amp = co.max()
+        
     fbr = az_peak_amp - fbr_max.max()   
     fbr_pos = fbr_max.idxmax()
     fbr=pd.concat([fbr,fbr_pos],axis = 1)
 
     fbr.columns = ['Front to Back Ratio','@ Angle']
-
     return fbr
 
 ###############################################################################
@@ -190,9 +188,15 @@ def find_squint(az_co):
 #function to calculate squint. Inputs are 3db intersection points
 def cal_squint(r_int,l_int):
     midpoint=(r_int+l_int)/2.0
+     #this is our ideal value 
     squint=abs(midpoint-BORESIGHT)
+    
+    
+    return squint,midpoint
 
-    return squint, midpoint
+   
+
+
 
 ###############################################################################
 #
@@ -210,6 +214,11 @@ def peak_squint(az_co):
 
     return peak_squint
     
+
+
+
+
+
 ###############################################################################
 #
 #   Tilt deviation @ Peak
@@ -225,6 +234,8 @@ def find_tilt(fname):
             _,tilt_angle=b.split("T")
         
     return float(tilt_angle)
+
+
 
 ##############################################################################
 
@@ -275,11 +286,22 @@ def cal_dev(r_int,l_int,ant_tilt):
     tilt=(BORESIGHT + ant_tilt) #this is our ideal value 
     deviation=abs(midpoint-tilt)
     
+    
     return deviation,midpoint
+
+   
+
+
+
+
+
+
+
+
 
 ###############################################################################
 #
-# Calculate first USL 
+# Calculate first USL from Main lobe
 #
 ###############################################################################
 
@@ -323,9 +345,9 @@ def cal_first_usl(wave):
     
     return first_usl, fst_usl_angle
 
-
 #Calulate the 1st USL for a table
-def find_first_usl(el_co, measurement_type):    #Convert the data so that it is stored in a more appropriate format
+def find_first_usl(el_co, measurement_type):
+    #Convert the data so that it is stored in a more appropriate format
     el_co = el_co.convert_objects(convert_numeric=True)    
     
     #Take column index into array 
@@ -347,7 +369,7 @@ def find_first_usl(el_co, measurement_type):    #Convert the data so that it is 
 
 ###############################################################################
 #
-#   USL in Range
+#   Max USL from Main lobe in Range 
 #
 ###############################################################################
 
