@@ -163,12 +163,9 @@ save_path=os.getcwd()+save_dir
 results_per_port=list()
 
 #Generate table per port
-for port_name in all_ports:
-
+for port_name in all_ports:    
     print("Starting "+  port_name  +"....")
     results_per_port.append(calulated_based_per_port(all_ports[port_name],port_name,save_path))
     print("Finished "+  port_name  )
 
 print("o.O.o")
-
-

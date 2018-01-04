@@ -15,10 +15,9 @@ from peakdetect import peakdetect
 #   Glpbal Variables
 #
 ##############################################################################
-BORESIGHT = 180             #Specify boresight angle
+BORESIGHT = 180             #Specify boresight angle. Not selection of Boresight 
+                            # should be an interger in the range 0-360
 USL_SEARCH_RANGE = 20       #Specify range frm Main lobe to search for USL
-
-
 
 ###############################################################################
 #
@@ -44,6 +43,8 @@ def normalise(co,cr):
     normalise_cr = cr - az_peak_amp
     normalised_az = pd.concat([normalise_co,normalise_cr], axis = 1)
     return normalised_az
+
+#TODO: Evaluate wheather or not we need to have a normalise2 function
 
 ###############################################################################
 #
@@ -85,6 +86,7 @@ def front_to_back(co):
     fbr.columns = ['Front to Back Ratio','@ Angle']
     return fbr
 
+
 ###############################################################################
 #
 #   3db beamwidth calculations
@@ -108,7 +110,6 @@ def stretch_axis(x,y,factor):
 #TODO: Add support for detecting the number of peaks. (For case when we have 
 #       A twin-peak in amp plot). This a unique feature and thus a low priority
 
-
 #Function to find the 3db intersection points of a wave
 def find_3db_intersection_angles(wave_str):
     
@@ -125,13 +126,39 @@ def find_3db_intersection_angles(wave_str):
 
     #section into left and right
     peak_idx=find_nearest(angle,peak_angle)
-    wave_left=amp[0:peak_idx]
-    wave_right=amp[peak_idx:len(angle)-1]
+    
+    #Isolate left and right hand side. Based on the location of the peak
+    #TODO: Make this into a function
+    if angle[peak_idx]>180:
+        #Change all values outside of range to greater that zero      
+        wave_left=np.copy(amp)
+        wave_left[0:int(peak_idx-(len(angle)/2))]=0.0
+        wave_left[int(peak_idx):int(peak_idx+(len(angle)/2))]=0.0
 
-    #Find left and right intersection
-    left_intxn=find_nearest(wave_left,peak_amp-3)
-    right_intxn=find_nearest(wave_right,peak_amp-3) +len(wave_left)
+        #Isolate the rest of the wave using masking
+        wave_right=np.copy(amp)
+        wave_right[int(peak_idx-(len(angle)/2)):int(peak_idx)]=0.0
         
+        if np.count_nonzero(wave_right)!=np.count_nonzero(wave_left):
+            print("3db intersection angle is not splitting equally")
+            
+    else:
+        #Change all values outside of range to greater that zero      
+        wave_right=np.copy(amp)
+        wave_right[0:int(peak_idx)]=0.0
+        wave_right[int(peak_idx+(len(angle)/2)):len(angle)]=0.0
+
+        #Isolate the rest of the wave using masking
+        wave_left=np.copy(amp)
+        wave_left[int(peak_idx):int(peak_idx+len(angle)/2)]=0.0
+        
+        if np.count_nonzero(wave_right)!=np.count_nonzero(wave_left):
+            print("3db intersection angle is not splitting equally")        
+        
+    #Find left and right intersection
+    left_intxn=find_nearest(wave_left,peak_amp-3) #3 because 3db
+    right_intxn=find_nearest(wave_right,peak_amp-3)
+    
     return angle[left_intxn], angle[right_intxn]
 
 
@@ -147,14 +174,22 @@ def find_3db_bw(az_co, measurement_type="3db Beamwidth"):
     for i in key_list:
         #Work with each column individually 
         lowwer_angle, upper_angle =find_3db_intersection_angles(az_co[i])
-        #Calculate 3db bw
-        bw_3db.append( np.abs(lowwer_angle-upper_angle) )
+        bw_3db.append( cal_3db_bw(lowwer_angle,upper_angle) )
     
     #Format into a data frame
     bw_3db_pd=pd.DataFrame({measurement_type:bw_3db,"index":key_list})
     bw_3db_pd=bw_3db_pd.set_index('index') 
             
     return bw_3db_pd
+
+def cal_3db_bw(lowwer_angle,upper_angle):
+    #Allow for overflow
+    if upper_angle < lowwer_angle:
+        upper_angle+=360
+    
+    bw_3db=abs(lowwer_angle-upper_angle)
+     #this is our ideal value 
+    return bw_3db
 
         
 ###############################################################################
@@ -186,17 +221,17 @@ def find_squint(az_co):
     
 
 #function to calculate squint. Inputs are 3db intersection points
-def cal_squint(r_int,l_int):
-    midpoint=(r_int+l_int)/2.0
+def cal_squint(lowwer_angle,upper_angle):
+    
+    #Allow for overflow
+    if upper_angle < lowwer_angle:
+        upper_angle+=360
+    
+    midpoint=(lowwer_angle+upper_angle)/2.0
      #this is our ideal value 
     squint=abs(midpoint-BORESIGHT)
     
-    
-    return squint,midpoint
-
-   
-
-
+    return squint,midpoint%360
 
 ###############################################################################
 #
@@ -214,10 +249,6 @@ def peak_squint(az_co):
 
     return peak_squint
     
-
-
-
-
 
 ###############################################################################
 #
@@ -288,15 +319,6 @@ def cal_dev(r_int,l_int,ant_tilt):
     
     
     return deviation,midpoint
-
-   
-
-
-
-
-
-
-
 
 
 ###############################################################################
