@@ -44,6 +44,16 @@ def normalise(co,cr):
     normalised_az = pd.concat([normalise_co,normalise_cr], axis = 1)
     return normalised_az
 
+#TODO: Merge Normalize and Normailse two into one function. 
+#Function needed for plotting. Returns two results rather than one. 
+def normalise2(co,cr):
+    az_peak_amp = co.max()      
+    normalise_co = co - az_peak_amp
+    normalise_cr = cr - az_peak_amp
+
+    return normalise_co,normalise_cr
+
+
 #TODO: Evaluate wheather or not we need to have a normalise2 function
 
 ###############################################################################

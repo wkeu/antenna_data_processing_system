@@ -16,6 +16,12 @@ import numpy as np
 #
 ###############################################################################
 
+###############################################################################
+#
+# Normal PNG plots
+#
+###############################################################################
+
 #Cartisian plot of normalised test data
 def plot_norm_cart(az_co,az_cr,fname,save_dir):
     
@@ -97,4 +103,64 @@ def plot_norm_polar(az_co,az_cr,fname,save_dir):
     plt.savefig(save_dir+fname+'.png', dpi=600) 
     plt.close('all')
     plt.ion() 
+
+###############################################################################
+#
+# Interactive Plots
+#
+###############################################################################
+
+import mpld3
+from mpld3 import plugins
+    
+def plot_norm_cart_interacive(az_co,az_cr,fname,save_dir):
+    
+    plt.ioff()
+    
+    #normalise 
+    az_co = az_co.convert_objects(convert_numeric=True)
+    az_cr = az_cr.convert_objects(convert_numeric=True)
+        
+    normalised_az,_ = normalise2(az_co,az_cr)
+
+    #Get Freq list of column headers
+    headers_az_co = list(az_co.dtypes.index)
+
+    #Create plot
+    fig, ax = plt.subplots(figsize=(12,7))
+    fig.subplots_adjust(right=.8)
+    labels = headers_az_co
+
+    line_collections = ax.plot(normalised_az, lw=1.5, alpha=0.9)
+    interactive_legend = plugins.InteractiveLegendPlugin(line_collections, labels, alpha_unsel=0.1, alpha_over=1.5, start_visible=False)
+    plugins.connect(fig, interactive_legend)
+
+
+    ###########################################################################
+    # Figure Settings
+
+    #Set axis parameters
+    ax.grid(alpha=0.25)
+    ax.set_ylim([-40,0.5])
+    ax.set_xlim([0,360])
+    x_tick_spacing = 20
+    y_tick_spacing = 3
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(x_tick_spacing))
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(y_tick_spacing))
+    
+    #Set Plot title & axis titles
+    ax.set_title(fname)
+
+    ax.set_ylabel('dBi')
+    ax.set_xlabel('Angle')
+
+    ax.set_ylim([-40,0.5])
+    ax.set_xlim([0,360])
+
+    #Save the figure as a html 
+    mpld3.save_html(fig,save_dir+fname+".html")
+    
+    plt.close('all')
+    plt.ion() 
+
     

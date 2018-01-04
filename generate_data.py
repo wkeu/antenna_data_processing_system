@@ -24,6 +24,9 @@ import os
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
+#Set to true to turn the images on. Flase for off
+IMAGES=True
+
 ###############################################################################
 #
 #   Results table
@@ -115,8 +118,10 @@ def calulated_based_per_port(P1,port_name,save_dir):
     az_results_table=results_table_az(az_co,az_cr)
     
     #Plots
-    plot_norm_cart(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
-    plot_norm_polar(  az_co,az_cr  , fname=port_name+" AZ Polar", save_dir=save_dir )
+    if (IMAGES):
+        plot_norm_cart(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
+        plot_norm_cart_interacive(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
+        plot_norm_polar(  az_co,az_cr  , fname=port_name+" AZ Polar", save_dir=save_dir )
     
     ###############################################################################
     # Elevation (Calculations and Plots) 
@@ -132,8 +137,10 @@ def calulated_based_per_port(P1,port_name,save_dir):
         list_of_rt.append(results_table_el(el_co,file))
         
         #Plots
-        plot_norm_cart(  el_co,el_co  , fname=port_name + " " +file+" Cart", save_dir=save_dir )
-        plot_norm_polar( el_co,el_co  , fname=port_name + " " +file+" Polar", save_dir=save_dir)
+        if(IMAGES):
+            plot_norm_cart(  el_co,el_co  , fname=port_name + " " +file+" Cart", save_dir=save_dir )
+            plot_norm_polar( el_co,el_co  , fname=port_name + " " +file+" Polar", save_dir=save_dir)
+            plot_norm_cart_interacive(  el_co,el_co  ,   fname=port_name + " " +file+" Cart", save_dir=save_dir)
     
     #Put into one table
     el_results_table=pd.concat(list_of_rt,axis=1)
