@@ -141,7 +141,7 @@ def calulated_based_per_port(P1,port_name,save_dir):
         if(IMAGES):
             plot_norm_cart(  el_co,el_co  , fname=port_name + " " +file+" Cart", save_dir=save_dir )
             plot_norm_polar( el_co,el_co  , fname=port_name + " " +file+" Polar", save_dir=save_dir)
-            plot_norm_cart_interacive_el(  el_co,el_co  ,   fname=port_name + " " +file+" Cart", save_dir=save_dir)
+            plot_norm_cart_interacive_el(  el_co, fname=port_name + " " +file+" Cart", save_dir=save_dir)
     
     #Put into one table
     el_results_table=pd.concat(list_of_rt,axis=1)

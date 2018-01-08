@@ -113,25 +113,24 @@ def plot_norm_polar(az_co,az_cr,fname,save_dir):
 import mpld3
 from mpld3 import plugins
     
-def plot_norm_cart_interacive_el(az_co,az_cr,fname,save_dir):
-    
+def plot_norm_cart_interacive_el(el_co, fname, save_dir):
+
     plt.ioff()
-    
-    #normalise 
-    az_co = az_co.convert_objects(convert_numeric=True)
-    az_cr = az_cr.convert_objects(convert_numeric=True)
-        
-    normalised_az,_ = normalise2(az_co,az_cr)
+
+    #normalise
+    el_co = el_co.convert_objects(convert_numeric=True)
+
+    normalised_el_co,_ = normalise2(el_co, el_co)
 
     #Get Freq list of column headers
-    headers_az_co = list(az_co.dtypes.index)
+    headers_el_co = list(el_co.dtypes.index)
 
     #Create plot
     fig, ax = plt.subplots(figsize=(12,7))
     fig.subplots_adjust(right=.8)
-    labels = headers_az_co
+    labels = headers_el_co
 
-    line_collections = ax.plot(normalised_az, lw=1.5, alpha=0.9)
+    line_collections = ax.plot(normalised_el_co, lw=1.5, alpha=0.9)
     interactive_legend = plugins.InteractiveLegendPlugin(line_collections, labels, alpha_unsel=0.1, alpha_over=1.5, start_visible=False)
     plugins.connect(fig, interactive_legend)
 
@@ -242,6 +241,4 @@ def plot_norm_cart_interacive_az(az_co,az_cr,fname,save_dir):
     
     plt.close('all')
     plt.ion() 
-    
-    
     
