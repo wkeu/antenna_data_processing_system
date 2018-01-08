@@ -113,7 +113,7 @@ def plot_norm_polar(az_co,az_cr,fname,save_dir):
 import mpld3
 from mpld3 import plugins
     
-def plot_norm_cart_interacive(az_co,az_cr,fname,save_dir):
+def plot_norm_cart_interacive_el(az_co,az_cr,fname,save_dir):
     
     plt.ioff()
     
@@ -149,18 +149,99 @@ def plot_norm_cart_interacive(az_co,az_cr,fname,save_dir):
     ax.yaxis.set_major_locator(ticker.MultipleLocator(y_tick_spacing))
     
     #Set Plot title & axis titles
-    ax.set_title(fname)
 
     ax.set_ylabel('dBi')
     ax.set_xlabel('Angle')
 
     ax.set_ylim([-40,0.5])
     ax.set_xlim([0,360])
-
+    
+    ax.set_title(fname)
+    
     #Save the figure as a html 
     mpld3.save_html(fig,save_dir+fname+".html")
     
     plt.close('all')
     plt.ion() 
 
+    
+def plot_norm_cart_interacive_az(az_co,az_cr,fname,save_dir):
+    
+    plt.ioff()
+    
+    #Defining a list of colors
+    colours=list( ["blue", "green", "red", "cyan", "magenta",
+             "yellow", "black", "tan", "firebrick",
+             "plum", "aqua", "darkblue", "crimson", "pink",
+             "chocolate", "darkgrey", "blue", "green", "red",
+             "cyan", "magenta", "yellow", "black", "tan", 
+             "firebrick", "plum", "aqua", "darkblue",
+             "crimson", "pink", "chocolate", "darkgrey" ]  )
+
+    #Convert data so that we can use it
+    az_co = az_co.convert_objects(convert_numeric=True)
+    az_cr = az_cr.convert_objects(convert_numeric=True)
+    
+    az_co,az_cr = normalise2(az_co,az_cr)
+    
+    #X axis
+    x1 = np.arange(0, 360, 1)
+    
+    #List of all frequencies
+    key_list=list(az_co.keys())
+    
+    
+    fig, ax = plt.subplots(figsize=(12,7))
+    fig.subplots_adjust(right=.8)
+    
+    #List of all lines
+    ln=list()
+    
+    #Loop plotting both the co and cross for each frequency
+    for i in range(len(key_list)):
+    
+        co = az_co[key_list[i]]  
+        cr = az_cr[key_list[i]]
+        
+        y1 = np.array([ co.as_matrix() ,  cr.as_matrix() ])
+        
+        ln.append(ax.plot(x1,
+                     y1.T, 
+                     lw=1.6, 
+                     alpha=0.9,
+                     label=key_list[i],
+                     c=colours[i]))
+    
+    #Link up interactive legend
+    plugins.connect(fig, plugins.InteractiveLegendPlugin(ln, key_list, alpha_unsel=0.05, alpha_over=1.5, start_visible=False))
+    
+    ###########################################################################
+    # Figure Settings
+    
+    #Set axis parameters
+    ax.grid(alpha=0.25)
+    ax.set_ylim([-40,0.5])
+    ax.set_xlim([0,360])
+    x_tick_spacing = 20
+    y_tick_spacing = 3
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(x_tick_spacing))
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(y_tick_spacing))
+        
+    #Set Plot title & axis titles
+    ax.set_ylabel('dBi')
+    ax.set_xlabel('Angle')
+    
+    ax.set_ylim([-40,0.5])
+    ax.set_xlim([0,360])
+        
+    #ax.set_title(fname)
+    ax.set_title(fname)
+    
+    #Save the figure as a html 
+    mpld3.save_html(fig,save_dir+fname+".html")
+    
+    plt.close('all')
+    plt.ion() 
+    
+    
     

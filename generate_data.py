@@ -120,8 +120,9 @@ def calulated_based_per_port(P1,port_name,save_dir):
     #Plots
     if (IMAGES):
         plot_norm_cart(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
-        plot_norm_cart_interacive(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
+        plot_norm_cart_interacive_az(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
         plot_norm_polar(  az_co,az_cr  , fname=port_name+" AZ Polar", save_dir=save_dir )
+        
     
     ###############################################################################
     # Elevation (Calculations and Plots) 
@@ -140,7 +141,7 @@ def calulated_based_per_port(P1,port_name,save_dir):
         if(IMAGES):
             plot_norm_cart(  el_co,el_co  , fname=port_name + " " +file+" Cart", save_dir=save_dir )
             plot_norm_polar( el_co,el_co  , fname=port_name + " " +file+" Polar", save_dir=save_dir)
-            plot_norm_cart_interacive(  el_co,el_co  ,   fname=port_name + " " +file+" Cart", save_dir=save_dir)
+            plot_norm_cart_interacive_el(  el_co,el_co  ,   fname=port_name + " " +file+" Cart", save_dir=save_dir)
     
     #Put into one table
     el_results_table=pd.concat(list_of_rt,axis=1)
@@ -159,20 +160,21 @@ def calulated_based_per_port(P1,port_name,save_dir):
 #
 ###############################################################################
 
-#import data
-#Alternatively we can use sub dir=\\raw_data\\
-
-all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_2\\"     )
-save_dir= "\\processed_data\\"
-save_path=os.getcwd()+save_dir
-#os.makedirs(save_dir)
-
-results_per_port=list()
-
-#Generate table per port
-for port_name in all_ports:    
-    print("Starting "+  port_name  +"....")
-    results_per_port.append(calulated_based_per_port(all_ports[port_name],port_name,save_path))
-    print("Finished "+  port_name  )
-
-print("o.O.o")
+if __name__ == "__main__":
+    #import data
+    #Alternatively we can use sub dir=\\raw_data\\
+    
+    all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_2\\"     )
+    save_dir= "\\processed_data\\"
+    save_path=os.getcwd()+save_dir
+    #os.makedirs(save_dir)
+    
+    results_per_port=list()
+    
+    #Generate table per port
+    for port_name in all_ports:    
+        print("Starting "+  port_name  +"....")
+        results_per_port.append(calulated_based_per_port(all_ports[port_name],port_name,save_path))
+        print("Finished "+  port_name  )
+    
+    print("o.O.o")
