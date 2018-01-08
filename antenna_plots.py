@@ -209,9 +209,9 @@ def plot_norm_cart_interacive_az(az_co,az_cr,fname,save_dir):
                      y1.T, 
                      lw=1.6, 
                      alpha=0.9,
-                     label=key_list[i],
-                     c=colours[i]))
-    
+                     label=key_list[i]))
+                     #,c=colours[i]))
+        
     #Link up interactive legend
     plugins.connect(fig, plugins.InteractiveLegendPlugin(ln, key_list, alpha_unsel=0.05, alpha_over=1.5, start_visible=False))
     
