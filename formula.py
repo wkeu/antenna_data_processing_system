@@ -354,17 +354,19 @@ def find_peaks(wave,factor=100):
 
     #Put into dataframe
     df_peaks = pd.DataFrame(data=peaks,columns=["angle","amp"])
+    df_trough= pd.DataFrame(data=troughs,columns=["angle","amp"])
 
     #Convert index into angle
     df_peaks.angle=df_peaks.angle/factor
+    df_trough.angle=df_trough.angle/factor
 
-    return df_peaks
+    return df_peaks, df_trough
 
 #Calulate the 1st USL for a given frequency
 def cal_first_usl(wave):
    
     #Find the peaks and troughs
-    df_peaks = find_peaks(wave)
+    df_peaks, _ = find_peaks(wave)
 
     #Find index of peak
     idx_max=df_peaks.idxmax()
@@ -414,7 +416,7 @@ def find_first_usl(el_co, measurement_type):
 def calc_usl_in_range(wave,angle_range=30,Boresight=False):
     
     #Find the peaks and troughs
-    df_peaks = find_peaks( wave )
+    df_peaks, _ = find_peaks( wave )
     
     #find peak amp,angle and index
     _,peak_amp=df_peaks.max()
@@ -474,3 +476,45 @@ def find_usl_in_range(el_co, measurement_type,angle_range=20, Boresight=False):
         
     return usl_pd    
 
+###############################################################################
+#
+# Formula for omnidirectional Antenna
+#
+###############################################################################
+
+###############################################################################
+#
+# Ripple
+#
+###############################################################################
+
+#Function to find the 3db beamwidths for a given graph
+def find_ripple(az_co, measurement_type="Ripple"):
+    
+    #Collect keys    
+    key_list=az_co.keys()
+    
+    #Initalise list
+    ripple=list()
+
+    #Cycle through each frequency column
+    for i in key_list:
+        #Work with each column individually 
+        ripple.append( cal_ripple( az_co[i] ) )
+    
+    #Format into a data frame
+    ripple_pd=pd.DataFrame({measurement_type:ripple,"index":key_list})
+    ripple_pd=ripple_pd.set_index('index') 
+            
+    return ripple_pd
+
+def cal_ripple(wave_str):
+    
+    peaks, troughs = find_peaks(wave_str)
+    
+    wave_max=peaks["amp"].max()
+    wave_min=troughs["amp"].min()
+
+    ripple=abs(wave_max-wave_min)
+    
+    return ripple

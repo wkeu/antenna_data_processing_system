@@ -52,7 +52,6 @@ def results_table_az(az_co,az_cr):
     return results
 
 #Results table for elevation measurments
-#TODO: Add tilt devation 
 def results_table_el(el_co,fname="EL TX"):
 
     el_co = el_co.convert_objects(convert_numeric=True)
@@ -97,9 +96,34 @@ def results_final(az_results_table,el_results_table,port_name,save_dir):
 #
 ###############################################################################
 
+# Function which returns the names of the Azmuth measurements. It is assumed 
+# that there will only be one co and one cross measurment. 
+def find_az_co_cr(P1):
+
+    #If co and cross are not detected then return false for the strings.
+    co_str=False
+    cr_str=False
+    
+    #Loop for 
+    for i in P1:    
+    
+        #Check if it is a A
+        if (i.split(" ")[0]=="AZ"):
+            
+            if (i.split(" ")[2]=="CR"):
+                cr_str=i
+                
+            else:
+                co_str=i
+    
+    return co_str,cr_str
+
 #Function to do calculations based on the port and tilts. It generates all 
 #tables for az calculations and then el calculations. It the merges and returns 
-#results table.     
+#results table.  
+
+#TODO if AZ is not present. It will break the results table. This is not ideal. 
+
 def calulated_based_per_port(P1,port_name,save_dir):
     P1=dict(P1) #Keep this! Ensures a copy was made.
     
@@ -108,14 +132,23 @@ def calulated_based_per_port(P1,port_name,save_dir):
     ############################################################################### 
     
     #Do Azimuth Calculations first, removing them from P1 in the process
-    az_co=P1.pop("AZ T0 CO")
-    az_cr=P1.pop("AZ T0 CR")
     
-    az_co=az_co["amplitude"]
-    az_cr=az_cr["amplitude"]
+    az_co_str, az_cr_str = find_az_co_cr(P1)
     
-    #Generates r esults table
-    az_results_table=results_table_az(az_co,az_cr)
+    #Co and Cross not detected
+    if (az_co_str == False) or (az_cr_str == False):
+        print ("Warning: AZ_CO and CO_CR were not detected.")
+        
+    else:
+        print ("AZ co and cross detected.")
+        az_co=P1.pop(az_co_str)
+        az_cr=P1.pop(az_cr_str)
+        
+        az_co=az_co["amplitude"]
+        az_cr=az_cr["amplitude"]
+        
+        #Generates r esults table
+        az_results_table=results_table_az(az_co,az_cr)
     
     #Plots
     if (IMAGES):
@@ -164,7 +197,7 @@ if __name__ == "__main__":
     #import data
     #Alternatively we can use sub dir=\\raw_data\\
     
-    all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_2\\"     )
+    all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_4\\"     )
     save_dir= "\\processed_data\\"
     save_path=os.getcwd()+save_dir
     #os.makedirs(save_dir)
@@ -175,6 +208,6 @@ if __name__ == "__main__":
     for port_name in all_ports:    
         print("Starting "+  port_name  +"....")
         results_per_port.append(calulated_based_per_port(all_ports[port_name],port_name,save_path))
-        print("Finished "+  port_name  )
+        print("Finished "+  port_name)
     
     print("o.O.o")
