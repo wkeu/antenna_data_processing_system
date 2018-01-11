@@ -60,8 +60,8 @@ def results_table_el(el_co,fname="EL TX"):
     first_usl= find_first_usl(el_co,"first_usl "+fname)
     usl_range = find_usl_in_range(el_co,measurement_type="usl_range "+fname)
     usl_range_bs = find_usl_in_range(el_co, measurement_type="usl_range bs"+fname, Boresight=True)
-    peak_dev = peak_tilt_dev(el_co,fname)
-    tilt_dev = find_tilt_dev(el_co,fname)    
+    peak_dev = peak_tilt_dev(el_co,'Peak dev of Peak'+fname,fname)
+    tilt_dev = find_tilt_dev(el_co,'Tilt dev of Peak'+fname,fname)    
     
     #Put into a dataframe
     results = pd.DataFrame()
@@ -189,6 +189,91 @@ def calulated_based_per_port(P1,port_name,save_dir):
 
 ###############################################################################
 #
+# Master Results table Generation 
+#
+###############################################################################
+    
+#TODO: Move the results table generation to a seperate file. 
+    
+#Get a clean list of all measurements. 
+def get_list_of_measurements(results_per_port):
+    P1=results_per_port[0]
+
+    key_list=list(P1.keys())
+
+    #Clean up keys list. Remove all @ Angle
+    while "@ Angle" in key_list:
+        key_list.remove("@ Angle")
+    
+    return key_list
+
+#Function to generate a table for a summary table for a given item. 
+def generate_table_per_item(results_per_port,item):
+    #Ported from old code
+    item_per_port=list()
+      
+    port=1
+    
+    for i in results_per_port:
+        #Read in data
+        p1=i
+    
+        #Drop Avg, Max and Min
+        p1=p1.drop(['Average', 'Max','Min'])
+    
+        #Isolate column from port file
+        p1_item=p1[item]
+        p1_item=p1_item.rename( str(port) )
+        port+=1
+        
+        #Append to a list
+        item_per_port.append(p1_item)
+    
+    #Create the sub_table
+    sub_table=pd.DataFrame(item_per_port)
+    sub_table= sub_table.T
+    
+    #Create summary table
+    max_val=    [sub_table.values.max()]*len(sub_table)
+    min_val=    [sub_table.values.min()]*len(sub_table)
+    mean_val=   [sub_table.values.mean()]*len(sub_table)
+    
+    summary_table = pd.DataFrame({"max":max_val,"min":min_val,"mean":mean_val}, sub_table.index)
+    summary_table = round(summary_table,2)
+    
+    #Create one table
+    final_table = pd.concat([sub_table,summary_table],axis=1)
+    
+    return final_table
+
+#Function to generate a master table 
+def generate_master_table(results_per_port,save_path):
+    
+    #Get a clean list of results
+    measurements_lst = get_list_of_measurements(results_per_port)
+    list(range(0,len(measurements_lst)))
+    
+    final_tables=list()
+    
+    #
+    for item in measurements_lst:
+
+        final_tables.append(  generate_table_per_item(results_per_port,item)  )
+        
+    #Save to an excel sheet
+    # Create a Pandas Excel writer using XlsxWriter as the engine.
+    writer = pd.ExcelWriter(save_path+'master_table.xlsx', engine='xlsxwriter')
+
+    for i in range(0,len(final_tables)):
+        # Write each dataframe to a different worksheet.
+        final_tables[i].to_excel(writer, sheet_name=measurements_lst[i])
+        
+    writer.save()
+
+
+
+###############################################################################
+#
 # Main 
 #
 ###############################################################################
@@ -197,7 +282,7 @@ if __name__ == "__main__":
     #import data
     #Alternatively we can use sub dir=\\raw_data\\
     
-    all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_4\\"     )
+    all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_2\\"     )
     save_dir= "\\processed_data\\"
     save_path=os.getcwd()+save_dir
     #os.makedirs(save_dir)
@@ -209,5 +294,7 @@ if __name__ == "__main__":
         print("Starting "+  port_name  +"....")
         results_per_port.append(calulated_based_per_port(all_ports[port_name],port_name,save_path))
         print("Finished "+  port_name)
+    
+    generate_master_table(results_per_port,save_path)
     
     print("o.O.o")

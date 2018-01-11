@@ -224,8 +224,8 @@ def find_squint(az_co):
         sqt.append( x )
         midpoint.append( y )
     
-    sqt_pd=pd.DataFrame({"Squint of 3dB Midpoint":sqt,"  @ Angle":midpoint,"index":key_list})
-    sqt_pd=sqt_pd.reindex(columns=["Squint of 3dB Midpoint","  @ Angle","index"])
+    sqt_pd=pd.DataFrame({"Squint of 3dB Midpoint":sqt,"@ Angle":midpoint,"index":key_list})
+    sqt_pd=sqt_pd.reindex(columns=["Squint of 3dB Midpoint","@ Angle","index"])
     sqt_pd=sqt_pd.set_index('index') 
     return sqt_pd
     
@@ -280,7 +280,7 @@ def find_tilt(fname):
 
 ##############################################################################
 
-def peak_tilt_dev(el_co,fname):
+def peak_tilt_dev(el_co,measurement_type,fname):
     ant_tilt = find_tilt(fname)
     el_peak = el_co.max()
     peak_pos = el_co.idxmax()
@@ -288,7 +288,7 @@ def peak_tilt_dev(el_co,fname):
 
     peak_tilt_deviation = abs(peak_pos - (ant_tilt+BORESIGHT))
     peak_tilt_deviation = pd.concat([peak_tilt_deviation,peak_pos],axis = 1)
-    peak_tilt_deviation.columns = (['Tilt dev of Peak','@ Angle'])
+    peak_tilt_deviation.columns = ([measurement_type,'@ Angle'])
 
     return peak_tilt_deviation
 
@@ -299,7 +299,7 @@ def peak_tilt_dev(el_co,fname):
 #
 ###############################################################################
 
-def find_tilt_dev(el_co,fname):
+def find_tilt_dev(el_co,measurement_type,fname):
     #Collect keys
     key_list=el_co.keys()
     #Initalise list
@@ -315,8 +315,8 @@ def find_tilt_dev(el_co,fname):
         dev.append( x )
         midpoint.append( y )
     
-    dev_pd=pd.DataFrame({"Tilt Deviation of 3dB Midpoint":dev,"  @ Angle":midpoint,"index":key_list})
-    dev_pd=dev_pd.reindex(columns=["Tilt Deviation of 3dB Midpoint","  @ Angle","index"])
+    dev_pd=pd.DataFrame({measurement_type:dev,"@ Angle":midpoint,"index":key_list})
+    dev_pd=dev_pd.reindex(columns=[measurement_type,"@ Angle","index"])
     dev_pd=dev_pd.set_index('index') 
     return dev_pd
     
@@ -413,7 +413,7 @@ def find_first_usl(el_co, measurement_type):
     
 #Finds the difference in amplitude between largest side lobe and peaks over a 
 #certain frequency range. By default 180 degrees away from the peak. 
-def calc_usl_in_range(wave,angle_range=30,Boresight=False):
+def calc_usl_in_range(wave,angle_range=USL_SEARCH_RANGE,Boresight=False):
     
     #Find the peaks and troughs
     df_peaks, _ = find_peaks( wave )
