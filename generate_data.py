@@ -3,9 +3,7 @@
 Created on Wed Dec  6 10:37:37 2017
 
 @author: matt.slevin
-"""
 
-"""
 Before running this file. Make sure that you set the working directory to the 
 working git repository. 
 """
@@ -26,6 +24,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 #Set to true to turn the images on. Flase for off
 IMAGES=True
+sub_dir = "\\raw_data_2\\"  
 
 ###############################################################################
 #
@@ -71,10 +70,7 @@ def results_table_el(el_co,fname="EL TX"):
 
 
 #Merge AZ and EL into one results table. And final formatting
-def results_final(az_results_table,el_results_table,port_name,save_dir): 
-    
-    #Merge Tables
-    final_results_table=pd.concat([az_results_table,el_results_table],axis=1)
+def results_final(final_results_table,port_name,save_dir): 
     
     #Add average min and max
     final_results_table.loc['Average'] = final_results_table.mean()                                             #add row named average to table calulating average of each column
@@ -136,11 +132,23 @@ def calulated_based_per_port(P1,port_name,save_dir):
     az_co_str, az_cr_str = find_az_co_cr(P1)
     
     #Co and Cross not detected
-    if (az_co_str == False) or (az_cr_str == False):
-        print ("Warning: AZ_CO and CO_CR were not detected.")
+    if (az_co_str == False) and (az_cr_str == False):
+        print ("Notification: AZ_CO and CO_CR were not detected.")
+    
+    #Only Co detected
+    elif ( isinstance(az_co_str,str)) and (az_cr_str == False):
+        print ("Notification: Only AZ_CO was detected.")
         
+        az_co=P1.pop(az_co_str)
+        az_co=az_co["amplitude"]
+        az_cr=az_co
+        
+        #Generates r esults table
+        az_results_table=results_table_az(az_co,az_co)
+       
+    #Both Cr and Co detected
     else:
-        print ("AZ co and cross detected.")
+        print ("Notification: AZ Co and Cross detected.")
         az_co=P1.pop(az_co_str)
         az_cr=P1.pop(az_cr_str)
         
@@ -151,12 +159,11 @@ def calulated_based_per_port(P1,port_name,save_dir):
         az_results_table=results_table_az(az_co,az_cr)
     
     #Plots
-    if (IMAGES):
+    if (IMAGES and isinstance(az_co_str,str)):
         plot_norm_cart(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
         plot_norm_cart_interacive_az(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=save_dir)
         plot_norm_polar(  az_co,az_cr  , fname=port_name+" AZ Polar", save_dir=save_dir )
         
-    
     ###############################################################################
     # Elevation (Calculations and Plots) 
     ###############################################################################
@@ -182,8 +189,14 @@ def calulated_based_per_port(P1,port_name,save_dir):
     ###############################################################################
     # Merge into final results table
     ###############################################################################
+    
+    if isinstance(az_co_str,str):
+        merged_table=pd.concat([az_results_table,el_results_table],axis=1)
 
-    final_results_table=results_final(az_results_table,el_results_table, port_name,save_dir)
+    else:
+        merged_table=el_results_table
+
+    final_results_table=results_final(merged_table, port_name,save_dir)
     
     return final_results_table
 
@@ -282,7 +295,7 @@ if __name__ == "__main__":
     #import data
     #Alternatively we can use sub dir=\\raw_data\\
     
-    all_ports=read_in_data_all_ports(    sub_dir = "\\raw_data_2\\"     )
+    all_ports=read_in_data_all_ports(    sub_dir     )
     save_dir= "\\processed_data\\"
     save_path=os.getcwd()+save_dir
     #os.makedirs(save_dir)
