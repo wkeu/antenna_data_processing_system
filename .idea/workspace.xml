@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fb9cfb9f-b216-417e-82db-a4571bebb081" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/antennas.py" afterPath="$PROJECT_DIR$/antennas.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generate_data.py" afterPath="$PROJECT_DIR$/generate_data.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test_code/interactive_plot_html_generator.ipynb" afterPath="$PROJECT_DIR$/test_code/interactive_plot_html_generator.ipynb" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="formula.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/formula.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <marker date="1515689397471" expanded="true" signature="7898:8378" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="11183:11257" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="11364:11526" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="11529:11768" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="11801:12236" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="11801:12448" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="12518:12923" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="13003:13647" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="13273:13428" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="13649:14176" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="14250:15384" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="14870:15051" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="15057:15137" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="15147:15352" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="15520:16251" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="15526:15634" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="15838:16050" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="16257:16688" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="16739:17177" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="16900:16993" ph="..." />
+                <marker date="1515689397471" expanded="true" signature="17204:17380" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="antenna_plots.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/antenna_plots.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1071">
+              <caret line="115" column="32" lean-forward="false" selection-start-line="115" selection-start-column="4" selection-end-line="115" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="generate_data.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generate_data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="50">
+              <caret line="278" column="8" lean-forward="false" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="26" />
+              <folding>
+                <marker date="1515775388961" expanded="true" signature="24:86" ph="&quot;&quot;&quot;Created on Wed Dec  6 10:37:37 2017...&quot;&quot;&quot;" />
+                <marker date="1515775388961" expanded="true" signature="86:194" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+                <marker date="1515775388961" expanded="true" signature="196:379" ph="..." />
+                <marker date="1515775388961" expanded="false" signature="381:502" ph="import ..." />
+                <marker date="1515775388961" expanded="true" signature="631:851" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="886:1551" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="1636:2300" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="2437:3428" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="3431:3798" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="3821:4207" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="3966:4177" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="4039:4177" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="4209:4465" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="4519:6922" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="4582:4863" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="5083:5364" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="5397:5679" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="5698:5938" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="6032:6503" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="6195:6503" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="6592:6792" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="6924:7234" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="7282:7477" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="7599:8584" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="7704:8022" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="8678:9361" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="8992:9082" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="9204:9334" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="9365:9536" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="9564:10181" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="9569:9632" ph="..." />
+                <marker date="1515775388961" expanded="true" signature="9907:10098" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="antennas.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/antennas.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="158">
+              <caret line="525" column="39" lean-forward="true" selection-start-line="525" selection-start-column="39" selection-end-line="525" selection-end-column="39" />
+              <folding>
+                <element signature="e#265#283#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>plot_norm_cart_interacive_el</find>
+      <find>numpy</find>
+    </findStrings>
+    <dirStrings>
+      <dir>C:\Users\matt.slevin\AppData\Local\Continuum\anaconda3</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/antenna_plots.py" />
+        <option value="$PROJECT_DIR$/generate_data.py" />
+        <option value="$PROJECT_DIR$/antennas.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="355" />
+    <option name="y" value="60" />
+    <option name="width" value="697" />
+    <option name="height" value="735" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="antenna_data_processing_system" type="b2602c69:ProjectViewProjectNode" />
+              <item name="antenna_data_processing_system" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="antenna_data_processing_system" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="antenna_data_processing_system" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.6.3 (C:\Users\matt.slevin\AppData\Local\Continuum\anaconda3\python.exe) &gt;" type="70bed36:NamedLibraryElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/generate_data.py" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.antennas.py">
+    <configuration name="antennas.py" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\matt.slevin\AppData\Local\Continuum\anaconda3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="antenna_data_processing_system" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/antennas.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="generate_data" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\matt.slevin\AppData\Local\Continuum\anaconda3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="antenna_data_processing_system" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/generate_data.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="Python.generate_data" />
+      <item index="1" class="java.lang.String" itemvalue="Python.antennas.py" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fb9cfb9f-b216-417e-82db-a4571bebb081" name="Default" comment="" />
+      <created>1515426260930</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1515426260930</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-25" y="-5" width="697" height="735" extended-state="0" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2496329" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32492113" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4037855" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="5" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/formula.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515689397471" expanded="true" signature="7898:8378" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11183:11257" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11364:11526" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11529:11768" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11801:12236" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11801:12448" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="12518:12923" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13003:13647" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13273:13428" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13649:14176" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="14250:15384" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="14870:15051" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15057:15137" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15147:15352" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15520:16251" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15526:15634" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15838:16050" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16257:16688" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16739:17177" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16900:16993" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="17204:17380" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/antenna_plots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1955">
+          <caret line="115" column="32" lean-forward="false" selection-start-line="115" selection-start-column="4" selection-end-line="115" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3332">
+          <caret line="196" column="16" lean-forward="true" selection-start-line="196" selection-start-column="16" selection-end-line="196" selection-end-column="16" />
+          <folding>
+            <marker date="1515775388961" expanded="true" signature="24:86" ph="&quot;&quot;&quot;Created on Wed Dec  6 10:37:37 2017...&quot;&quot;&quot;" />
+            <marker date="1515775388961" expanded="true" signature="86:194" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1515775388961" expanded="true" signature="196:379" ph="..." />
+            <marker date="1515775388961" expanded="false" signature="381:502" ph="import ..." />
+            <marker date="1515775388961" expanded="true" signature="631:851" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="886:1551" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="1636:2300" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="2437:3428" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3431:3798" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3821:4207" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3966:4177" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4039:4177" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4209:4465" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4519:6922" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4582:4863" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5083:5364" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5397:5679" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5698:5938" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6032:6503" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6195:6503" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6592:6792" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6924:7234" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7282:7477" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7599:8584" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7704:8022" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="8678:9361" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="8992:9082" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9204:9334" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9365:9536" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9564:10181" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9569:9632" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9907:10098" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/antennas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2074">
+          <caret line="122" column="15" lean-forward="false" selection-start-line="122" selection-start-column="15" selection-end-line="122" selection-end-column="15" />
+          <folding>
+            <element signature="e#265#283#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/formula.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515689397471" expanded="true" signature="7898:8378" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11183:11257" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11364:11526" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11529:11768" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11801:12236" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11801:12448" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="12518:12923" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13003:13647" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13273:13428" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13649:14176" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="14250:15384" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="14870:15051" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15057:15137" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15147:15352" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15520:16251" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15526:15634" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15838:16050" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16257:16688" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16739:17177" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16900:16993" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="17204:17380" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/antenna_plots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1955">
+          <caret line="115" column="32" lean-forward="false" selection-start-line="115" selection-start-column="4" selection-end-line="115" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2958">
+          <caret line="179" column="18" lean-forward="false" selection-start-line="179" selection-start-column="18" selection-end-line="179" selection-end-column="18" />
+          <folding>
+            <marker date="1515775388961" expanded="true" signature="24:86" ph="&quot;&quot;&quot;Created on Wed Dec  6 10:37:37 2017...&quot;&quot;&quot;" />
+            <marker date="1515775388961" expanded="true" signature="86:194" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1515775388961" expanded="true" signature="196:379" ph="..." />
+            <marker date="1515775388961" expanded="false" signature="381:502" ph="import ..." />
+            <marker date="1515775388961" expanded="true" signature="631:851" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="886:1551" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="1636:2300" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="2437:3428" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3431:3798" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3821:4207" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3966:4177" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4039:4177" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4209:4465" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4519:6922" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4582:4863" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5083:5364" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5397:5679" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5698:5938" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6032:6503" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6195:6503" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6592:6792" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6924:7234" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7282:7477" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7599:8584" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7704:8022" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="8678:9361" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="8992:9082" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9204:9334" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9365:9536" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9564:10181" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9569:9632" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9907:10098" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/formula.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1515689397471" expanded="true" signature="7898:8378" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11183:11257" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11364:11526" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11529:11768" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11801:12236" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="11801:12448" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="12518:12923" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13003:13647" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13273:13428" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="13649:14176" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="14250:15384" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="14870:15051" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15057:15137" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15147:15352" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15520:16251" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15526:15634" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="15838:16050" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16257:16688" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16739:17177" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="16900:16993" ph="..." />
+            <marker date="1515689397471" expanded="true" signature="17204:17380" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/antenna_plots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1071">
+          <caret line="115" column="32" lean-forward="false" selection-start-line="115" selection-start-column="4" selection-end-line="115" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generate_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="278" column="8" lean-forward="false" selection-start-line="278" selection-start-column="0" selection-end-line="278" selection-end-column="26" />
+          <folding>
+            <marker date="1515775388961" expanded="true" signature="24:86" ph="&quot;&quot;&quot;Created on Wed Dec  6 10:37:37 2017...&quot;&quot;&quot;" />
+            <marker date="1515775388961" expanded="true" signature="86:194" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
+            <marker date="1515775388961" expanded="true" signature="196:379" ph="..." />
+            <marker date="1515775388961" expanded="false" signature="381:502" ph="import ..." />
+            <marker date="1515775388961" expanded="true" signature="631:851" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="886:1551" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="1636:2300" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="2437:3428" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3431:3798" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3821:4207" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="3966:4177" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4039:4177" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4209:4465" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4519:6922" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="4582:4863" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5083:5364" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5397:5679" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="5698:5938" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6032:6503" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6195:6503" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6592:6792" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="6924:7234" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7282:7477" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7599:8584" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="7704:8022" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="8678:9361" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="8992:9082" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9204:9334" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9365:9536" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9564:10181" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9569:9632" ph="..." />
+            <marker date="1515775388961" expanded="true" signature="9907:10098" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/pkgs/numba-0.35.0-np113py36_10/Lib/site-packages/numba/cuda/tests/cudadrv/test_deallocations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="176" column="19" lean-forward="true" selection-start-line="176" selection-start-column="19" selection-end-line="176" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#31#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/Lib/__future__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1530">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/antennas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="525" column="39" lean-forward="true" selection-start-line="525" selection-start-column="39" selection-end-line="525" selection-end-column="39" />
+          <folding>
+            <element signature="e#265#283#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
