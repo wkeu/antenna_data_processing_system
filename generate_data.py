@@ -21,10 +21,22 @@ import pandas as pd
 import os
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
+import argparse
+
+#Parse In arguments
+parser = argparse.ArgumentParser(description='Process test data of Antenna.')
+
+parser.add_argument('sub_dir', type=str, default="raw_data_2",
+                    help='The directory of the antenna test files, ex raw_data_5')
+
+args = parser.parse_args()
+
+print(str(args.sub_dir))
+
 
 #Set to true to turn the images on. Flase for off
 IMAGES=True
-sub_dir = "\\raw_data_2\\"  
+sub_dir = "\\"+args.sub_dir+"\\"
 
 ###############################################################################
 #
