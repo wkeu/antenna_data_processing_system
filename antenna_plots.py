@@ -5,10 +5,11 @@ Created on Wed Dec 13 09:46:34 2017
 @author: matt.slevin
 """
 
-from formula import *
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
+import pandas as pd 
+from antennas import *
 
 ###############################################################################
 #
@@ -32,7 +33,7 @@ def plot_norm_cart(az_co,az_cr,fname,save_dir):
     plt.ioff() 
     
     #normalise 
-    normalised_az = normalise(az_co,az_cr)
+    normalised_az = Sector.normalise("",az_co,az_cr)
     
     #Get Freq list of column headers
     headers_az_co = list(az_co.dtypes.index)
@@ -76,7 +77,7 @@ def plot_norm_polar(az_co,az_cr,fname,save_dir):
     
     plt.ioff()
     #Normalise
-    normalised_az = normalise(az_co,az_cr)
+    normalised_az = Sector.normalise("",az_co,az_cr)
 
     #Add roll around
     normalised_az=pd.concat([normalised_az,normalised_az.loc[[0]]])
@@ -120,7 +121,7 @@ def plot_norm_cart_interacive_el(el_co, fname, save_dir):
     #normalise
     el_co = el_co.convert_objects(convert_numeric=True)
 
-    normalised_el_co,_ = normalise2(el_co, el_co)
+    normalised_el_co,_ = Sector.normalise2("",el_co, el_co)
 
     #Get Freq list of column headers
     headers_el_co = list(el_co.dtypes.index)
@@ -181,7 +182,7 @@ def plot_norm_cart_interacive_az(az_co,az_cr,fname,save_dir):
     az_co = az_co.convert_objects(convert_numeric=True)
     az_cr = az_cr.convert_objects(convert_numeric=True)
     
-    az_co,az_cr = normalise2(az_co,az_cr)
+    az_co,az_cr = Sector.normalise2("",az_co,az_cr)
     
     #X axis
     x1 = np.arange(0, 360, 1)
