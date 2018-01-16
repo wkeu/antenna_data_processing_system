@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Mon Jan 15 15:33:12 2018
+
+@author: matt.slevin
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Wed Dec  6 10:37:37 2017
 
 @author: matt.slevin
@@ -15,14 +22,14 @@ working git repository.
 ###############################################################################
 
 from file_merge import * 
-from formula import *
+from antennas import *
 from antenna_plots import *
 import pandas as pd
 import os
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
-import argparse
 
+"""
 #Parse In arguments
 parser = argparse.ArgumentParser(description='Process test data of Antenna.')
 
@@ -35,8 +42,12 @@ print(str(args.sub_dir))
 
 
 #Set to true to turn the images on. Flase for off
-IMAGES=True
+
 sub_dir = "\\"+args.sub_dir+"\\"
+"""
+
+sub_dir="\\raw_data_2\\"
+IMAGES=False
 
 ###############################################################################
 #
@@ -46,15 +57,18 @@ sub_dir = "\\"+args.sub_dir+"\\"
 #Results table for azimuth measurments
 def results_table_az(az_co,az_cr):
     
-    #Convert to usable format
     az_co = az_co.convert_objects(convert_numeric=True)
     az_cr = az_cr.convert_objects(convert_numeric=True)
     
+    test_antenna=Sector("test")
+    
+    #Convert to usable format
+    
     #Calculate
-    xpol_at_sector = sector_xpol(az_co,az_cr)                                              # import function sector_xpol                     
-    fbr = front_to_back(az_co)                                                          # import function front_to_back
-    az_bw_3db = find_3db_bw(az_co,"Az Co 3db BW")
-    squint=find_squint(az_co)
+    xpol_at_sector = test_antenna.sector_xpol(az_co,az_cr)                                           # import function sector_xpol                     
+    fbr = test_antenna.front_to_back(az_co)                                                          # import function front_to_back
+    az_bw_3db = test_antenna.find_3db_bw(az_co,"Az Co 3db BW")
+    squint= test_antenna.find_squint(az_co)
     
     #Put into a dataframe
     results = pd.DataFrame()
@@ -67,12 +81,14 @@ def results_table_el(el_co,fname="EL TX"):
 
     el_co = el_co.convert_objects(convert_numeric=True)
     
-    el_bw_3db = find_3db_bw(el_co,"3db BW "+fname)
-    first_usl= find_first_usl(el_co,"first_usl "+fname)
-    usl_range = find_usl_in_range(el_co,measurement_type="usl_range "+fname)
-    usl_range_bs = find_usl_in_range(el_co, measurement_type="usl_range bs"+fname, Boresight=True)
-    peak_dev = peak_tilt_dev(el_co,'Peak dev of Peak'+fname,fname)
-    tilt_dev = find_tilt_dev(el_co,'Tilt dev of Peak'+fname,fname)    
+    t_ant = Sector("test")
+    
+    el_bw_3db = t_ant.find_3db_bw(el_co,"3db BW "+fname)
+    first_usl= t_ant.find_first_usl(el_co,"first_usl "+fname)
+    usl_range = t_ant.find_usl_in_range(el_co,measurement_type="usl_range "+fname)
+    usl_range_bs = t_ant.find_usl_in_range(el_co, measurement_type="usl_range bs"+fname, Boresight=True)
+    peak_dev = t_ant.peak_tilt_dev(el_co,'Peak dev of Peak'+fname,fname)
+    tilt_dev = t_ant.find_tilt_dev(el_co,'Tilt dev of Peak'+fname,fname)    
     
     #Put into a dataframe
     results = pd.DataFrame()
@@ -131,6 +147,12 @@ def find_az_co_cr(P1):
 #results table.  
 
 #TODO if AZ is not present. It will break the results table. This is not ideal. 
+    
+def is_empty(any_structure):
+    if any_structure:
+        return False
+    else:
+        return True
 
 def calulated_based_per_port(P1,port_name,save_dir):
     P1=dict(P1) #Keep this! Ensures a copy was made.
@@ -196,17 +218,26 @@ def calulated_based_per_port(P1,port_name,save_dir):
             plot_norm_cart_interacive_el(  el_co, fname=port_name + " " +file+" Cart", save_dir=save_dir)
     
     #Put into one table
-    el_results_table=pd.concat(list_of_rt,axis=1)
+    if is_empty(not(list_of_rt)):
+        el_results_table=pd.concat(list_of_rt,axis=1)
     
     ###############################################################################
     # Merge into final results table
     ###############################################################################
     
-    if isinstance(az_co_str,str):
+    #Both
+    if isinstance(az_co_str,str) and is_empty(not(list_of_rt)) :
         merged_table=pd.concat([az_results_table,el_results_table],axis=1)
 
+    #Only AZ
+    elif(isinstance(az_co_str,str)):
+        merged_table=az_results_table
+
+    #Only EL
     else:
         merged_table=el_results_table
+
+    
 
     final_results_table=results_final(merged_table, port_name,save_dir)
     
