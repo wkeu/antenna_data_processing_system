@@ -26,6 +26,7 @@ from antennas import *
 from antenna_plots import *
 import pandas as pd
 import os
+import sys
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -44,59 +45,38 @@ print(str(args.sub_dir))
 #Set to true to turn the images on. Flase for off
 
 sub_dir = "\\"+args.sub_dir+"\\"
+
 """
 
-sub_dir="\\raw_data_2\\"
-IMAGES=True
+#antenna_raw_data\\omni_data\\AW3008\\
 
+sub_dir="\\antenna_raw_data\\omni_data\\AW3008\\"
+IMAGES=True
+#Specify the type of antenna. Options are "omni","sector","twin_peak"
+antenna_type="omni"
+
+#Create test antenna object
+if(antenna_type=="omni"):
+    test_ant=Omnidirectional("test_ant")
+    print("Omni antenna selected")
+    
+elif(antenna_type=="sector"):
+    test_ant=Sector("test_ant")
+    print("Sector antenna selected")
+
+elif(antenna_type=="twin_peak"):
+    test_ant=Twin("test_ant")
+    print("Twin peak antenna selected")
+
+else:    
+    print("Error:Invalid Antenna type")
+    sys.exit(0)
+    
 ###############################################################################
 #
 #   Results table
 #
 ###############################################################################
-#Results table for azimuth measurments
-def results_table_az(az_co,az_cr):
-    
-    az_co = az_co.convert_objects(convert_numeric=True)
-    az_cr = az_cr.convert_objects(convert_numeric=True)
-    
-    test_antenna=Sector("test")
-    
-    #Convert to usable format
-    
-    #Calculate
-    xpol_at_sector = test_antenna.sector_xpol(az_co,az_cr)                                           # import function sector_xpol                     
-    fbr = test_antenna.front_to_back(az_co)                                                          # import function front_to_back
-    az_bw_3db = test_antenna.find_3db_bw(az_co,"Az Co 3db BW")
-    squint= test_antenna.find_squint(az_co)
-    
-    #Put into a dataframe
-    results = pd.DataFrame()
-    results = pd.concat([az_bw_3db,squint,xpol_at_sector,fbr],axis = 1)
-    
-    return results
-
-#Results table for elevation measurments
-def results_table_el(el_co,fname="EL TX"):
-
-    el_co = el_co.convert_objects(convert_numeric=True)
-    
-    t_ant = Sector("test")
-    
-    el_bw_3db = t_ant.find_3db_bw(el_co,"3db BW "+fname)
-    first_usl= t_ant.find_first_usl(el_co,"first_usl "+fname)
-    usl_range = t_ant.find_usl_in_range(el_co,measurement_type="usl_range "+fname)
-    usl_range_bs = t_ant.find_usl_in_range(el_co, measurement_type="usl_range bs"+fname, Boresight=True)
-    peak_dev = t_ant.peak_tilt_dev(el_co,'Peak dev of Peak'+fname,fname)
-    tilt_dev = t_ant.find_tilt_dev(el_co,'Tilt dev of Peak'+fname,fname)    
-    
-    #Put into a dataframe
-    results = pd.DataFrame()
-    results = pd.concat([el_bw_3db,first_usl,usl_range,usl_range_bs,peak_dev,tilt_dev],axis = 1)
-    
-    return results
-
-
 #Merge AZ and EL into one results table. And final formatting
 def results_final(final_results_table,port_name,save_dir): 
     
@@ -112,7 +92,6 @@ def results_final(final_results_table,port_name,save_dir):
     final_results_table.to_csv( save_dir + port_name+" results.csv" )                                                    # Function to output results of calc to table
     
     return final_results_table
-
 
 ###############################################################################
 #
@@ -157,6 +136,9 @@ def is_empty(any_structure):
 def calulated_based_per_port(P1,port_name,save_dir):
     P1=dict(P1) #Keep this! Ensures a copy was made.
     
+    #TODO, test ant will be an input into this 
+    #test_ant=Omnidirectional("test_ant")
+    
     ###############################################################################
     # Azimuth (Calculations and Plots)
     ############################################################################### 
@@ -178,7 +160,7 @@ def calulated_based_per_port(P1,port_name,save_dir):
         az_cr=az_co
         
         #Generates r esults table
-        az_results_table=results_table_az(az_co,az_co)
+        az_results_table=test_ant.results_table_az(az_co,az_cr)
        
     #Both Cr and Co detected
     else:
@@ -190,7 +172,7 @@ def calulated_based_per_port(P1,port_name,save_dir):
         az_cr=az_cr["amplitude"]
         
         #Generates r esults table
-        az_results_table=results_table_az(az_co,az_cr)
+        az_results_table=test_ant.results_table_az(az_co,az_cr)
     
     #Plots
     if (IMAGES and isinstance(az_co_str,str)):
@@ -209,7 +191,7 @@ def calulated_based_per_port(P1,port_name,save_dir):
     for file in P1:
         #Isolate the file
         el_co= P1[file]["amplitude"]
-        list_of_rt.append(results_table_el(el_co,file))
+        list_of_rt.append(test_ant.results_table_el(el_co,file))
         
         #Plots
         if(IMAGES):
@@ -351,6 +333,6 @@ if __name__ == "__main__":
         results_per_port.append(calulated_based_per_port(all_ports[port_name],port_name,save_path))
         print("Finished "+  port_name)
     
-    generate_master_table(results_per_port,save_path)
+   # generate_master_table(results_per_port,save_path)
     
     print("o.O.o")

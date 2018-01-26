@@ -65,7 +65,7 @@ def plot_norm_cart(az_co,az_cr,fname,save_dir):
     ax1.add_artist(legend1)
 
     #Export Plot
-    plt.savefig(save_dir+fname+'.png', dpi=600)     
+    plt.savefig(save_dir+fname+'.png', dpi=300)     
     plt.close('all')  
     plt.ion() 
     
@@ -101,7 +101,7 @@ def plot_norm_polar(az_co,az_cr,fname,save_dir):
 
     ax2.add_artist(legend1)
 
-    plt.savefig(save_dir+fname+'.png', dpi=600) 
+    plt.savefig(save_dir+fname+'.png', dpi=300) 
     plt.close('all')
     plt.ion() 
 
