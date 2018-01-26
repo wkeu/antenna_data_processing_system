@@ -240,9 +240,15 @@ def get_list_of_measurements(results_per_port):
     key_list=list(P1.keys())
 
     #Clean up keys list. Remove all @ Angle
+    while "@ Angle c_pk" in key_list:
+        key_list.remove("@ Angle c_pk")
+
+    while "@ Angle f_pk" in key_list:
+        key_list.remove("@ Angle f_pk")
+
     while "@ Angle" in key_list:
         key_list.remove("@ Angle")
-    
+        
     return key_list
 
 #Function to generate a table for a summary table for a given item. 
@@ -333,6 +339,6 @@ if __name__ == "__main__":
         results_per_port.append(calulated_based_per_port(all_ports[port_name],port_name,save_path))
         print("Finished "+  port_name)
     
-   # generate_master_table(results_per_port,save_path)
+    generate_master_table(results_per_port,save_path)
     
     print("o.O.o")
