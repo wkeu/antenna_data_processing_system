@@ -49,11 +49,11 @@ sub_dir = "\\"+args.sub_dir+"\\"
 """
 
 #antenna_raw_data\\omni_data\\AW3008\\
-
-sub_dir="\\antenna_raw_data\\omni_data\\AW3008\\"
+antenna_model="AW3629"
+sub_dir="\\antenna_raw_data\\sector_data\\"+antenna_model+"\\"
 IMAGES=True
 #Specify the type of antenna. Options are "omni","sector","twin_peak"
-antenna_type="omni"
+antenna_type="sector"
 
 #Create test antenna object
 if(antenna_type=="omni"):
@@ -71,6 +71,20 @@ elif(antenna_type=="twin_peak"):
 else:    
     print("Error:Invalid Antenna type")
     sys.exit(0)
+    
+    
+def clear_processed_data():
+    shutil.rmtree(os.getcwd()+"\\processed_data\\",ignore_errors=True)
+    
+    directory = os.getcwd()+"\\processed_data\\patterns\\"
+    
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    
+    folders = ['planet','ant','atoll','msi']
+    
+    for folder in folders:
+        os.mkdir(os.path.join(directory,folder))  
     
 ###############################################################################
 #
@@ -313,9 +327,6 @@ def generate_master_table(results_per_port,save_path):
         final_tables[i].to_excel(writer, sheet_name=measurements_lst[i])
         
     writer.save()
-
-
-
 ###############################################################################
 #
 # Main 
@@ -326,11 +337,13 @@ if __name__ == "__main__":
     #import data
     #Alternatively we can use sub dir=\\raw_data\\
     
+    #clear processed data folder of all data
+    clear_processed_data()
+    
     all_ports=read_in_data_all_ports(    sub_dir     )
     save_dir= "\\processed_data\\"
     save_path=os.getcwd()+save_dir
-    #os.makedirs(save_dir)
-    
+
     results_per_port=list()
     
     #Generate table per port
@@ -340,5 +353,7 @@ if __name__ == "__main__":
         print("Finished "+  port_name)
     
     generate_master_table(results_per_port,save_path)
+    
+    #generate_pattern_files(all_ports,results_per_port,antenna_model)
     
     print("o.O.o")

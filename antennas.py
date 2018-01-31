@@ -8,7 +8,9 @@
 import numpy as np
 import pandas as pd
 from scipy.signal import savgol_filter
+
 from peakdetect import peakdetect
+
 
 ########################################################################################################################
 #
@@ -273,7 +275,28 @@ class Masterantenna:
         deviation = abs(pk_angle - tilt)
 
         return deviation, pk_angle
-    
+
+    def split_wave(self,wave):
+    #Function to isolate certain sections of an omni wave
+        wave_np=np.asarray(wave)
+
+        #Peak at full circle
+        first_pk=np.concatenate((  wave_np[0:90]  ,  np.full(180,wave_np.min())  ,  wave_np[270:360]  ))
+        #Centre Peak
+        centre_pk=np.concatenate((  np.full(90,wave_np.min())  ,  wave_np[90:270]  ,  np.full(90,wave_np.min())  ))
+
+        #First wave centred and flipped
+        first_pk_flipped=np.concatenate((  np.full(90,wave_np.min())  ,  wave_np[270:360] ,  wave_np[0:90] ,  np.full(90,wave_np.min())  ))
+        first_pk_flipped=np.fliplr([first_pk_flipped])[0]
+
+        #Convert into a series datafram
+        first_pk=pd.Series(first_pk)
+        centre_pk=pd.Series(centre_pk)
+        first_pk_flipped=pd.Series(first_pk_flipped)
+
+        return first_pk, centre_pk, first_pk_flipped
+
+
 ########################################################################################################################
 #
 # Child Class
@@ -465,7 +488,7 @@ class Sector(Masterantenna):
         #Put into a dataframe
         peak_dev_pd = pd.DataFrame({
                 measurement_type: peak_dev,
-                "@ Angle pk_dev_angle": pk_angle, 
+                "@ Angle": pk_angle, 
                 "index": key_list})
     
         #dev_pd = dev_pd.reindex(columns=[measurement_type, "@ Angle", "index"])
@@ -642,27 +665,7 @@ class Omnidirectional(Masterantenna):
     #
     # Elevation Calculation 
     #
-    
-    def split_wave(self,wave):
-    #Function to isolate certain sections of an omni wave
-        wave_np=np.asarray(wave)
-        
-        #Peak at full circle
-        first_pk=np.concatenate((  wave_np[0:90]  ,  np.full(180,wave_np.min())  ,  wave_np[270:360]  ))
-        #Centre Peak
-        centre_pk=np.concatenate((  np.full(90,wave_np.min())  ,  wave_np[90:270]  ,  np.full(90,wave_np.min())  ))
-        
-        #First wave centred and flipped
-        first_pk_flipped=np.concatenate((  np.full(90,wave_np.min())  ,  wave_np[270:360] ,  wave_np[0:90] ,  np.full(90,wave_np.min())  ))
-        first_pk_flipped=np.fliplr([first_pk_flipped])[0]
-        
-        #Convert into a series datafram
-        first_pk=pd.Series(first_pk)
-        centre_pk=pd.Series(centre_pk)
-        first_pk_flipped=pd.Series(first_pk_flipped)
-        
-        return first_pk, centre_pk, first_pk_flipped
-    
+
     def find_3db_bw(self,az_co, measurement_type="3db Beamwidth"):
 
         # Collect keys
