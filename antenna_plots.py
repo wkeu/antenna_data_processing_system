@@ -118,9 +118,9 @@ def plot_norm_cart_interacive_el(el_co, fname, save_dir):
 
     plt.ioff()
 
-    #normalise
     el_co = el_co.convert_objects(convert_numeric=True)
 
+	#normalise
     normalised_el_co,_ = Sector.normalise2("",el_co, el_co)
 
     #Get Freq list of column headers
