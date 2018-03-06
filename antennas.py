@@ -24,7 +24,7 @@ class Masterantenna:
     #Global Variables
     BORESIGHT = 180         # Specify boresight angle. Not selection of Boresight ( # should be an interger in the range 0-360)
     USL_SEARCH_RANGE = 45   # Specify range frm Main lobe to search for USL
-    FBR_RANGE = 30  # define +/- range to check for FBR
+    FBR_RANGE = 30          # define +/- range to check for FBR
 
     def __init__(self, name):
         self.name = name
@@ -320,7 +320,7 @@ class Sector(Masterantenna):
         #Calculate
         xpol_at_sector = self.find_xpol(az_co,az_cr)    
         fbr = self.find_front_to_back(az_co)                            
-        az_bw_3db = self.find_3db_bw(az_co,"Az Co 3db BW")
+        az_bw_3db = self.find_3db_bw(az_co,"Az Co 3dB Beamwidth")
         squint= self.find_squint(az_co)
         
         #Put into a dataframe
@@ -335,12 +335,12 @@ class Sector(Masterantenna):
         el_co = el_co.convert_objects(convert_numeric=True)
         
         #Calculate
-        el_bw_3db = self.find_3db_bw(el_co,"3db BW "+fname)
-        first_usl= self.find_first_usl(el_co,"first_usl "+fname)
-        usl_range = self.find_usl_in_range(el_co,measurement_type="usl_range "+fname)
-        usl_range_bs = self.find_usl_in_range(el_co, measurement_type="usl_range bs"+fname, Boresight=True)
-        peak_dev = self.find_peak_dev(el_co,'Peak dev'+fname,fname)
-        tilt_dev = self.find_tilt_dev(el_co,'Tilt dev'+fname,fname)    
+        el_bw_3db = self.find_3db_bw(el_co,"3dB Beamwidth "+fname)
+        first_usl= self.find_first_usl(el_co,"1st upper sidelobe "+fname)
+        usl_range = self.find_usl_in_range(el_co,measurement_type="USL in range "+fname)
+        usl_range_bs = self.find_usl_in_range(el_co, measurement_type="USL in range (BS) "+fname, Boresight=True)
+        peak_dev = self.find_peak_dev(el_co,'Peak Deviation '+fname,fname)
+        tilt_dev = self.find_tilt_dev(el_co,'Tilt Deviation '+fname,fname)    
         
         #Put into a dataframe
         results = pd.DataFrame()
@@ -354,7 +354,7 @@ class Sector(Masterantenna):
     def find_xpol(self,co, cr):
         xpol_at_sector = co.iloc[self.BORESIGHT] - cr.iloc[self.BORESIGHT]  # co at sector - cr at sector
         xpol_at_sector = xpol_at_sector.to_frame()
-        xpol_at_sector.columns = ['X Pol at sector']
+        xpol_at_sector.columns = ['Cross Pole']
         return xpol_at_sector
 
     def find_front_to_back(self,co):
@@ -600,12 +600,12 @@ class Omnidirectional(Masterantenna):
         el_co = el_co.convert_objects(convert_numeric=True)
         
         #Calculate
-        find_3db_bw = self.find_3db_bw(el_co, measurement_type="3db BW "+fname)
-        first_usl= self.find_first_usl(el_co,"first_usl "+fname)
-        usl_in_range= self.find_usl_in_range(el_co,"range_usl "+fname)
-        usl_in_range_bs= self.find_usl_in_range(el_co,"range_usl_bs "+fname,Boresight=True)  
-        tilt_dev = self.find_tilt_dev(el_co, 'Tilt dev'+fname,fname)
-        peak_dev = self.find_peak_dev(el_co, 'Peak dev'+fname,fname)
+        find_3db_bw = self.find_3db_bw(el_co, measurement_type="3dB BW "+fname)
+        first_usl= self.find_first_usl(el_co,"1st USL "+fname)
+        usl_in_range= self.find_usl_in_range(el_co,"USL range "+fname)
+        usl_in_range_bs= self.find_usl_in_range(el_co,"USL range (BS) "+fname,Boresight=True)  
+        tilt_dev = self.find_tilt_dev(el_co, 'Tilt Deviation '+fname,fname)
+        peak_dev = self.find_peak_dev(el_co, 'Peak Deviation '+fname,fname)
         
         #Put into a dataframe
         results = pd.DataFrame()
@@ -658,7 +658,7 @@ class Omnidirectional(Masterantenna):
         cross_pol_max=diff.min()
         cross_pol_mean=diff.mean()
 
-        cross_pol=pd.DataFrame({"X Pol (max)":cross_pol_max,"X Pol (mean)":cross_pol_mean})
+        cross_pol=pd.DataFrame({"Cross Pol (max)":cross_pol_max,"Cross Pol (mean)":cross_pol_mean})
         
         return cross_pol
     
@@ -690,8 +690,8 @@ class Omnidirectional(Masterantenna):
 
         # Format into a data frame
         bw_3db_pd = pd.DataFrame({
-                measurement_type+" first pk": bw_3db_first_pk,
-                measurement_type+" centre pk": bw_3db_centre_pk, 
+                measurement_type+" 1st pk": bw_3db_first_pk,
+                measurement_type+" mid pk": bw_3db_centre_pk, 
                 "index": key_list})
         bw_3db_pd = bw_3db_pd.set_index('index')
 
@@ -728,9 +728,9 @@ class Omnidirectional(Masterantenna):
 
         # Format to panda
         first_usl_pd = pd.DataFrame({
-                measurement_type+" first pk": first_usl_first_pk, 
+                measurement_type+" 1st pk": first_usl_first_pk, 
                 "@ Angle f_pk": first_usl_first_pk_angle, 
-                measurement_type+" centre pk": first_usl_centre_peak, 
+                measurement_type+" mid pk": first_usl_centre_peak, 
                 "@ Angle c_pk": first_usl_centre_pk_angle,
                 "index": key_list})
         first_usl_pd = first_usl_pd.set_index('index')
@@ -770,9 +770,9 @@ class Omnidirectional(Masterantenna):
 
         # Format to panda
         range_usl_pd = pd.DataFrame({
-                measurement_type+" first pk": range_usl_first_pk, 
+                measurement_type+" 1st pk": range_usl_first_pk, 
                 "@ Angle f_pk": range_usl_first_pk_angle, 
-                measurement_type+" centre pk": range_usl_centre_peak, 
+                measurement_type+" mid pk": range_usl_centre_peak, 
                 "@ Angle c_pk": range_usl_centre_pk_angle,
                 "index": key_list})
         range_usl_pd = range_usl_pd.set_index('index')
@@ -813,9 +813,9 @@ class Omnidirectional(Masterantenna):
             
         # Format to panda data frame
         dev_pd = pd.DataFrame({
-                measurement_type+" first pk": dev_first_pk, 
+                measurement_type+" 1st pk": dev_first_pk, 
                 "@ Angle f_pk": midpoint_first_pk, 
-                measurement_type+" centre pk": dev_centre_pk, 
+                measurement_type+" mid pk": dev_centre_pk, 
                 "@ Angle c_pk": midpoint_centre_pk, 
                 "index": key_list})
         
@@ -855,9 +855,9 @@ class Omnidirectional(Masterantenna):
                         
         # Format to panda data frame
         dev_pd = pd.DataFrame({
-                measurement_type+" first pk": first_peak_dev, 
+                measurement_type+" 1st pk": first_peak_dev, 
                 "@ Angle f_pk": actual_first_peak, 
-                measurement_type+" centre pk": centre_peak_dev, 
+                measurement_type+" mid pk": centre_peak_dev, 
                 "@ Angle c_pk": actual_centre_peak, 
                 "index": key_list})
         

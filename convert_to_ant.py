@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jan 30 09:57:34 2018
-
-@author: matt.slevin
-"""
 
 # -*- coding: utf-8 -*-
 """
