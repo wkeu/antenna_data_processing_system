@@ -1,24 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 29 15:14:12 2018
-
-@author: matt.slevin
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 29 12:21:19 2018
-
-@author: matt.slevin
-"""
-
 from generate_data import * 
 
 #read in the data
 all_ports=read_in_data_all_ports(    sub_dir     )
 save_dir= "\\processed_data\\patterns\\planet\\"
 save_path=os.getcwd()+save_dir
-
 
 for PN in all_ports:
     #isolate horizontal and vertical data
@@ -74,5 +59,3 @@ for PN in all_ports:
         f.close()
     
     i+=1
-
-

@@ -93,12 +93,49 @@ def plot_norm_polar(az_co,az_cr,fname,save_dir):
     fig2 = plt.figure(figsize=[13,7])
     ax2 = fig2.add_subplot(111,projection='polar')
     ax2.set_title(fname)
-    ax2.plot(angle_rad, normalised_az,linewidth=0.75,alpha=0.5)
+    ax2.plot(angle_rad, normalised_az,linewidth=.75,alpha=0.5)#c="r")
     ax2.grid(alpha=0.25) #Set transparency of grid to 25%
     ax2.set_ylim([-40,0])
     legend1 = ax2.legend(headers_az_co, bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.5,title='freq',prop={'size':10})
 
 
+    ax2.add_artist(legend1)
+
+    plt.savefig(save_dir+fname+'.png', dpi=300) 
+    plt.close('all')
+    plt.ion() 
+
+#Polar plot of normalised test data    
+#Used for the plotting planet files 
+def plot_norm_polar_modified(az_co,az_cr,fname,save_dir):
+    
+    az_co = az_co.convert_objects(convert_numeric=True)
+    az_cr = az_cr.convert_objects(convert_numeric=True)
+    
+    plt.ioff()
+
+    #Add roll around
+    az_co=pd.concat([az_co,az_co.loc[[0]]])
+    az_cr=pd.concat([az_cr,az_cr.loc[[0]]])
+    
+    #Get Freq list of column headers
+    headers_az_co = list(az_co.dtypes.index)
+
+    #isolate wave 
+    angle_deg=np.arange(0,361,1)
+    angle_rad=np.deg2rad(angle_deg)
+
+    #Create plot
+    fig2 = plt.figure(figsize=[13,7])
+    ax2 = fig2.add_subplot(111,projection='polar')
+    ax2.set_theta_direction(-1)
+    ax2.set_rlabel_position(180)
+    ax2.set_title(fname)
+    ax2.plot(angle_rad, az_co,linewidth=2.75,alpha=0.75,label="Az Co")#c="r")
+    ax2.plot(angle_rad, az_cr,linewidth=2.75,alpha=0.75,label="Az Cr")#c="r")
+    ax2.grid(alpha=0.5) #Set transparency of grid to 25%
+    legend1 = ax2.legend(["Azimuth Co","Elevation Co"], bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.5,title='Frequency = '+headers_az_co[0]+" MHz",prop={'size':10})
+    
     ax2.add_artist(legend1)
 
     plt.savefig(save_dir+fname+'.png', dpi=300) 
@@ -116,7 +153,7 @@ from mpld3 import plugins
     
 def plot_norm_cart_interacive_el(el_co, fname, save_dir):
 
-    plt.ioff()
+    plt.ioff() #turns plot off
 
     el_co = el_co.convert_objects(convert_numeric=True)
 

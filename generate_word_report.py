@@ -9,18 +9,18 @@ from docx.shared import Inches
 import pandas as pd
 import os
 
-def panda_to_word_table(doc,df,measurment_type="El tilt devation",spec="",style="Light List Accent 1"):
+def panda_to_word_table(doc,df,measurment_type="El tilt deviation",spec="",style="Light List Accent 1"):
     
-    # Function to write excel speadsheet to word table
+    # Function to write excel spreadsheet to word table
     #Formatting of panda dataframe
     df = df.rename(index=str, columns={"index": "Frequency"})
         
     ###############################################################################
     # Data table (1), just copy all the data of the panda. Port names, frequency ect.
     ###############################################################################
-    # add a table to the end and create a reference variable
+    # add a table to the end and create a reference antenna_type
     # extra row is so we can add the header row
-    t = doc.add_table(df.shape[0], df.shape[1]+2)
+    t = doc.add_table(df.shape[0]+1, df.shape[1]+2)
     t.style =style
     
     # add the header rows.
@@ -28,9 +28,9 @@ def panda_to_word_table(doc,df,measurment_type="El tilt devation",spec="",style=
         t.cell(0,j).text = df.columns[j-2]
     
     # add the rest of the data frame
-    for i in range(1,df.shape[0]):
+    for i in range(1,df.shape[0]+1):
         for j in range(df.shape[-1]):
-            t.cell(i,j+2).text = str(df.values[i,j])
+            t.cell(i,j+2).text = str(df.values[i-1,j])
     
     ###############################################################################
     # Info Table I (2), Item and spec
@@ -40,7 +40,7 @@ def panda_to_word_table(doc,df,measurment_type="El tilt devation",spec="",style=
     
     #Merge cells
     a = t.cell(1, 0)
-    b = t.cell(df.shape[0]-1,0)#
+    b = t.cell(df.shape[0],0)#
     a.merge(b)
     
     t.cell(0,1).text="Spec"
@@ -48,7 +48,7 @@ def panda_to_word_table(doc,df,measurment_type="El tilt devation",spec="",style=
     
     #Merge cells
     a = t.cell(1, 1)
-    b = t.cell(df.shape[0]-1,1)#
+    b = t.cell(df.shape[0],1)#
     a.merge(b)
     
     ###############################################################################
@@ -116,11 +116,11 @@ def insert_radiation_tables(doc,master_table_path):
 #
 ###############################################################################        
 
-def generate_report(antenna_model="AWXXXX"):
-    dir_path=os.getcwd()
-    master_table_path=dir_path + "\\processed_data\\master_table.xlsx"
-    images_dir_path=dir_path + "\\processed_data\\images\\CART"
-    save_path=dir_path + "\\processed_data\\"+antenna_model+"report.docx"
+def generate_report(dir_path,antenna_model="AWXXXX"):
+    
+    master_table_path=dir_path + "master_table.xlsx"
+    images_dir_path=dir_path + "images/CART"
+    save_path=dir_path +antenna_model+"_report.docx"
     
     # Open a new document
     doc = Document()

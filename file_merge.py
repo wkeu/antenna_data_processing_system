@@ -156,9 +156,8 @@ def get_file_names_in_dir(path):
 #Function to read in data for one port
 
 #Function to read in data for one port
-def read_in_data_all_ports(sub_dir):
+def read_in_data_all_ports(path):
     
-    path=os.getcwd()+sub_dir
     f_names=get_file_names_in_dir(path)
 
     #Copy fnames for storing data
