@@ -1,23 +1,51 @@
 # Antenna Data Processing System
-=================================
+---------------------------------
+Package for the generation of antenna test reports using Python. Input patterns include Azimuth Co, Azimuth Cr and Elevation Co. Automatically generates microsoft word report which includes summary tables of measurments and pictures of the pattern files. Additionally it generates standard antenna pattern files (Planet, Atoll, MSI and Ant). 
 
-# Installation instructions
+### Metrics Calculated
+* 3dB Beam Width 
+* Cross Pol
+* Front to Back ratio
+* First Upper Sidelobe
+* Squint
+* Peak Devation
+* Gain (Working Progress)
+
+### Supported Antennas 
+* Omnidirectional
+* Sector
+
+This allowed for the interactive visualisation of antenna specification. Additionally a dramatic improvement in throughput and quality of the test results was attained. 
+
+## Installation instructions
 ---------------------------
-install anaconda 3.6.4 (64 Bit)
 
-custom packages to install
+*install anaconda 3.6.4 (Windows 64 Bit) ([link]) (https://anaconda.org/anaconda/python/3.6.4/download/linux-64/python-3.6.4-hc3d631a_0.tar.bz2)
 
-mpld3==0.3
-python-docx==0.8.6
+custom packages to install to enviroment(pip install):
+* mpld3==0.3
+* python-docx==0.8.6
 
+*Note: You will need to adjust Kronus.bat so that it points to the correct directory. 
 
+### Video Tutorial 
 [![Installation Instructions](https://img.youtube.com/vi/T-D1KVIuvjA/0.jpg)](http://www.youtube.com/watch?v=T-D1KVIuvjA)
 
-# Demo
-------
+## Demo
+-------
 
-# Adding new class of Antenna  
------------------------------
 
-# System Discription 
+## Adding new class of Antenna  
+------------------------------
+
+## System Discription 
 --------------------
+gui:
+generate data:
+antennas:
+antenna plots:
+file merge:
+generate pattern files:
+generate word report:
+peak detect:
+Khronos:
