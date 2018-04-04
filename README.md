@@ -40,12 +40,12 @@ custom packages to install to enviroment(pip install):
 
 ## System Discription 
 --------------------
-gui:
-generate data:
-antennas:
-antenna plots:
-file merge:
-generate pattern files:
-generate word report:
-peak detect:
-Khronos:
+* gui: Frontend. Allow for user to launch and configure program. Launch from here.
+* generate data: Essentially main, from 
+* antennas: Contains all classes of antennas and how each calculation is perfored for each antenna. Eg. 3dbw for a sector. 
+* antenna plots: Contains all functions for plotting (Polar, Cartisian, Interactive)
+* file merge: Contains all functions for reading in the 
+* generate pattern files:
+* generate word report:
+* peak detect:
+* Khronos.bat:
