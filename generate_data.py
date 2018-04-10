@@ -84,15 +84,16 @@ class Generate_data:
         
         if self.Gain == True:
             print("Generating Gain")        
+            #Run the gain calculations
+            gain.gain_main(self.save_folder,
+                           self.source_dir,
+                           self.gain_ref_model)
             
         if self.Pattern_Files == True:
             print("Generating a Pattern Files")
             print(self.gain_ref_model)
             #generate_pattern_files(all_ports,results_per_port,antenna_model)
-            #Run the gain calculations
-            gain.gain_main(self.save_folder,
-                           self.source_dir,
-                           self.gain_ref_model)
+
                 
         if self.Report == True:
             print("Generating a report")
