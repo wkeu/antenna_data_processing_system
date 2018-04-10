@@ -57,6 +57,12 @@ class Generate_data:
         #TODO: Set input to read in all ports to be source dir
         all_ports=read_in_data_all_ports(    self.source_dir + "/aut_ant/"    )
         
+        
+        rotate_angle= 0 #degrees, note ensure that this is a postivie angle 
+                 #this angle rotates back
+                 
+        all_ports = self.rotate_all_ports(all_ports,rotate_angle) 
+        
         #Determine Antenna Type
         #TODO Re-factor so that the functions are more consistent
         self.determine_ant_type()
@@ -297,7 +303,9 @@ class Generate_data:
         final_results_table=self.results_final(merged_table, port_name,save_dir)
         
         return final_results_table
+    
 
+    
     ###############################################################################
     #
     # Master Results table Generation 
@@ -379,3 +387,39 @@ class Generate_data:
             final_tables[i].to_excel(writer, sheet_name=measurements_lst[i])
             
         writer.save()
+        
+    def rotate_all_ports(self,all_ports,rotate_angle=0):
+
+        if rotate_angle==0:
+            all_ports_rotated=all_ports
+            
+        else:            
+            all_ports_rotated=all_ports.copy()
+            
+            #Port
+            for port in all_ports:
+                
+                #Measurement
+                for measurement in all_ports[port]:
+                
+                    #Rotate Panda
+                    pd_waves = all_ports[port][measurement]["amplitude"]
+                    pd_waves_rotated=self.rotate_panda(pd_waves, rotate_angle)
+                    all_ports_rotated[port][measurement]["amplitude"]=pd_waves_rotated
+        
+        return all_ports_rotated
+
+    
+    def rotate_panda(self,pd_waves, rotate_angle):
+        
+        #Transpose to make easier to dice and splice
+        
+        a=pd_waves[0:rotate_angle]
+        b=pd_waves[rotate_angle:len(pd_waves)]
+        
+        frames=[b,a]
+        result = pd.concat(frames)
+        result = result.reset_index()
+        result = result.drop(['index'], axis=1)
+        
+        return result
