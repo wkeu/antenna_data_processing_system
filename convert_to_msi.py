@@ -1,16 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 29 15:14:12 2018
-
-@author: matt.slevin
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 29 12:21:19 2018
-
-@author: matt.slevin
-"""
 
 from generate_data import * 
 

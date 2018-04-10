@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb 19 09:54:40 2018
-
-@author: MJ.McAssey
-"""
-
 from pandas import DataFrame, read_csv
 import pandas as pd
 import os

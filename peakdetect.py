@@ -1,6 +1,3 @@
-#!/usr/bin/python2
-
-
 # Copyright (C) 2016 Sixten Bergman
 # License WTFPL
 #

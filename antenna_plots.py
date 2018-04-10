@@ -10,6 +10,7 @@ import matplotlib.ticker as ticker
 import numpy as np
 import pandas as pd 
 from antennas import *
+from scipy.signal import savgol_filter
 
 ###############################################################################
 #
@@ -23,7 +24,7 @@ from antennas import *
 #
 ###############################################################################
 
-#Cartisian plot of normalised test data
+#Cartesian plot of normalized test data
 def plot_norm_cart(az_co,az_cr,fname,save_dir):
     
     az_co = az_co.convert_objects(convert_numeric=True)
@@ -32,7 +33,7 @@ def plot_norm_cart(az_co,az_cr,fname,save_dir):
     #Turn off plot so that it only saves it and dosnt show it
     plt.ioff() 
     
-    #normalise 
+    #normalize 
     normalised_az = Sector.normalise("",az_co,az_cr)
     
     #Get Freq list of column headers
@@ -69,14 +70,14 @@ def plot_norm_cart(az_co,az_cr,fname,save_dir):
     plt.close('all')  
     plt.ion() 
     
-#Polar plot of normalised test data    
+#Polar plot of normalized test data    
 def plot_norm_polar(az_co,az_cr,fname,save_dir):
     
     az_co = az_co.convert_objects(convert_numeric=True)
     az_cr = az_cr.convert_objects(convert_numeric=True)
     
     plt.ioff()
-    #Normalise
+    #Normalize
     normalised_az = Sector.normalise("",az_co,az_cr)
 
     #Add roll around
@@ -105,12 +106,21 @@ def plot_norm_polar(az_co,az_cr,fname,save_dir):
     plt.close('all')
     plt.ion() 
 
-#Polar plot of normalised test data    
+#Polar plot of normalized test data    
 #Used for the plotting planet files 
 def plot_norm_polar_modified(az_co,az_cr,fname,save_dir):
     
     az_co = az_co.convert_objects(convert_numeric=True)
     az_cr = az_cr.convert_objects(convert_numeric=True)
+
+    #TODO: The wave should be smoothed. Produces higher quality waves
+    # The problem is that the wave is stored in polar coordinates. We can convert 
+    # it to cart, smooth then back to radians 
+    
+    #Smooth the wave
+    #az_co = savgol_filter(az_co, 75, 3)
+    #az_cr = savgol_filter(az_cr, 75, 3)
+
     
     plt.ioff()
 
@@ -128,11 +138,13 @@ def plot_norm_polar_modified(az_co,az_cr,fname,save_dir):
     #Create plot
     fig2 = plt.figure(figsize=[13,7])
     ax2 = fig2.add_subplot(111,projection='polar')
+    ax2.set_ylim([-40,0.5])
+    #ax2.set_xlim([0,360])
     ax2.set_theta_direction(-1)
     ax2.set_rlabel_position(180)
     ax2.set_title(fname)
-    ax2.plot(angle_rad, az_co,linewidth=2.75,alpha=0.75,label="Az Co")#c="r")
-    ax2.plot(angle_rad, az_cr,linewidth=2.75,alpha=0.75,label="Az Cr")#c="r")
+    ax2.plot(angle_rad, az_co,linewidth=0.75,alpha=1,label="Az Co",c="k")
+    ax2.plot(angle_rad, az_cr,linewidth=0.75,alpha=1,label="Az Cr",c="r")
     ax2.grid(alpha=0.5) #Set transparency of grid to 25%
     legend1 = ax2.legend(["Azimuth Co","Elevation Co"], bbox_to_anchor=(-0.1, 0.9),fancybox = True, framealpha=0.5,title='Frequency = '+headers_az_co[0]+" MHz",prop={'size':10})
     
@@ -157,7 +169,7 @@ def plot_norm_cart_interacive_el(el_co, fname, save_dir):
 
     el_co = el_co.convert_objects(convert_numeric=True)
 
-	#normalise
+	#normalize
     normalised_el_co,_ = Sector.normalise2("",el_co, el_co)
 
     #Get Freq list of column headers

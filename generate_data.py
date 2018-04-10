@@ -4,11 +4,15 @@
 #
 ###############################################################################
 
+#Custom functions & Scripts
 from file_merge import read_in_data_all_ports
 from antennas import *
 from antenna_plots import *
 from generate_word_report import *
+import gain
 #from generate_pattern_files import *
+
+#Standard libraries
 import pandas as pd
 import os
 import sys
@@ -28,7 +32,7 @@ antenna_type="sector"
 class Generate_data:
 
     #def generate_data():
-    def __init__ (self, source_dir, save_path, antenna_type, Images, Report, Pattern_Files):
+    def __init__ (self, source_dir, save_path, antenna_type, Images, Report, Pattern_Files,Gain, gain_ref_model):
         
         #Set values of the class   
         self.source_dir = source_dir
@@ -37,6 +41,8 @@ class Generate_data:
         self.Images = Images
         self.Report = Report
         self.Pattern_Files = Pattern_Files 
+        self.Gain = Gain
+        self.gain_ref_model = gain_ref_model
         self.save_folder=self.save_path+"/processed data/"
         self.antenna_model=source_dir.split("/")[-1]
     
@@ -49,10 +55,10 @@ class Generate_data:
         self.clear_processed_data()
         
         #TODO: Set input to read in all ports to be source dir
-        all_ports=read_in_data_all_ports(    self.source_dir + "/"    )
+        all_ports=read_in_data_all_ports(    self.source_dir + "/aut_ant/"    )
         
         #Determine Antenna Type
-        #TODO Refactor so that the functions are more consistant
+        #TODO Re-factor so that the functions are more consistent
         self.determine_ant_type()
     
         results_per_port=dict()
@@ -63,20 +69,29 @@ class Generate_data:
             results_per_port[port_name]=(self.calulated_based_per_port(all_ports[port_name],port_name,self.save_path))
             print("Finished "+  port_name)
         
+        print("Result per port:")
         self.generate_master_table(results_per_port,self.save_path)
         
-        #TODO: Put images here.So that its more readable
+        #TODO: Put images generating functions here.So that its more readable
         if self.Images == True:
             print("Generating Images")
         
+        if self.Gain == True:
+            print("Generating Gain")        
+            
+        if self.Pattern_Files == True:
+            print("Generating a Pattern Files")
+            print(self.gain_ref_model)
+            #generate_pattern_files(all_ports,results_per_port,antenna_model)
+            #Run the gain calculations
+            gain.gain_main(self.save_folder,
+                           self.source_dir,
+                           self.gain_ref_model)
+                
         if self.Report == True:
             print("Generating a report")
             print(self.save_folder)
-            #generate_report(self.save_folder,"AWTest")
-            
-        if self.Report == True:
-            print("Generating a Pattern Files")
-            #generate_pattern_files(all_ports,results_per_port,antenna_model)
+            generate_report(self.save_folder,self.antenna_model)
         
         print("o.O.o")
     
@@ -103,16 +118,14 @@ class Generate_data:
 
     #function to clear the processed data folder and set up new directory (with subdir)    
     def clear_processed_data(self):
-        
-        
-        
+
         #Clear Folder
         if not os.path.isdir(self.save_folder):
             os.mkdir(self.save_folder)
         
         shutil.rmtree(self.save_folder,ignore_errors=True)
         
-        #TODO: Refactor this function
+        #TODO: Re-factor this function
         #Set up patterns sub dir
         directory = self.save_folder+"/patterns/"
         
@@ -130,7 +143,7 @@ class Generate_data:
         if not os.path.exists(directory):
             os.makedirs(directory)
         
-        folders = ['HTML','CART','POLAR']
+        folders = ['HTML','CART','POLAR','GAIN']
         
         for folder in folders:
             os.mkdir(os.path.join(directory,folder))  
@@ -157,8 +170,8 @@ class Generate_data:
         return final_results_table
 
     ###############################################################################
-    # Function which returns the names of the Azmuth measurements. It is assumed 
-    # that there will only be one co and one cross measurment. 
+    # Function which returns the names of the Azimuth measurements. It is assumed 
+    # that there will only be one co and one cross measurement. 
     def find_az_co_cr(self,PN):
     
         #If co and cross are not detected then return false for the strings.
@@ -188,10 +201,10 @@ class Generate_data:
             return True
     ###############################################################################
 
-    #TODO:  Some serious refactoring is needed in this fuction if time permits. It is
+    #TODO:  Some serious refactoring is needed in this function if time permits. It is
     #       quite busy
     
-    # Plot can definitly be removed into a function, it wont reduce the lines of 
+    # Plot can definitely be removed into a function, it wont reduce the lines of 
     # but it will make it more readable
     
     # Add functionality to results_table_az so it can deal without any cross
@@ -211,7 +224,7 @@ class Generate_data:
         
         #Co and Cross not detected
         if (az_co_str == False) and (az_cr_str == False):
-            print ("Notification: AZ_CO and CO_CR were not detected.")
+            print ("Notification: AZ_CO and AZ_CR were not detected.")
         
         #Only Co detected
         elif ( isinstance(az_co_str,str)) and (az_cr_str == False):
@@ -221,7 +234,7 @@ class Generate_data:
             az_co=az_co["amplitude"]
             az_cr=az_co #Ensures results table runs
             
-            #Generates r esults table
+            #Generates results table
             az_results_table=self.test_ant.results_table_az(az_co,az_cr)
            
         #Both Cr and Co detected
@@ -239,9 +252,9 @@ class Generate_data:
         #Plots
         if (self.Images and isinstance(az_co_str,str)):
             plot_norm_cart(  az_co,az_cr  ,  fname=port_name +" Cart", save_dir=self.save_folder+"/images/CART/")
-            plot_norm_cart_interacive_az(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=self.save_folder+"/images/HTML/")
             plot_norm_polar(  az_co,az_cr  , fname=port_name+" Polar", save_dir=self.save_folder+"/images/POLAR/" )
-            
+            plot_norm_cart_interacive_az(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=self.save_folder+"/images/HTML/")
+			
         ###########################################################################
         # Elevation (Calculations and Plots) 
         ###########################################################################
@@ -291,7 +304,7 @@ class Generate_data:
     #
     ###############################################################################
         
-    #TODO: Maybe move the results table generation to a seperate file. 
+    #TODO: Maybe move the results table generation to a separate file. 
         
     #Get a clean list of all measurements. 
     def get_list_of_measurements(self,results_per_port):
@@ -366,4 +379,3 @@ class Generate_data:
             final_tables[i].to_excel(writer, sheet_name=measurements_lst[i])
             
         writer.save()
-    

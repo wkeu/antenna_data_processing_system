@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb 26 14:25:13 2018
-
-@author: Matt Slevin
-"""
 from docx import Document
 from docx.shared import Inches
 import pandas as pd
@@ -16,7 +10,7 @@ def panda_to_word_table(doc,df,measurment_type="El tilt deviation",spec="",style
     df = df.rename(index=str, columns={"index": "Frequency"})
         
     ###############################################################################
-    # Data table (1), just copy all the data of the panda. Port names, frequency ect.
+    # Data table (1), just copy all the data of the panda. Port names, frequency etc.
     ###############################################################################
     # add a table to the end and create a reference antenna_type
     # extra row is so we can add the header row
@@ -118,8 +112,10 @@ def insert_radiation_tables(doc,master_table_path):
 
 def generate_report(dir_path,antenna_model="AWXXXX"):
     
-    master_table_path=dir_path + "master_table.xlsx"
+    master_table_path = dir_path + "master_table.xlsx"
+    gain_table_path = dir_path + "master_table.xlsx"
     images_dir_path=dir_path + "images/CART"
+    gain_images_dir_path=dir_path + "images/GAIN"
     save_path=dir_path +antenna_model+"_report.docx"
     
     # Open a new document
@@ -136,5 +132,3 @@ def generate_report(dir_path,antenna_model="AWXXXX"):
     # save the doc
     doc.save(save_path)
     print("Report for antenna " + antenna_model + " generated.")
-
-

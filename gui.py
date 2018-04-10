@@ -1,20 +1,18 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Mar 14 11:18:55 2018
-
-@author: Matt Slevin
+Basic Gui, allows for the 
 """
 
 from tkinter import *
 from tkinter import filedialog
 import webbrowser
 from generate_data import Generate_data
+import os 
 
 class Startscreen:
 
     #TODO: Set up directory to be independent of any user
-    source_dir="C:/Users/Matt Slevin/Documents/GitHub/antenna_data_processing_system/antenna_raw_data/sector_data/IR468_V2"
-    save_path= "C:/Users/Matt Slevin/Documents/GitHub/antenna_data_processing_system"
+    source_dir=os.getcwd() + "\\antenna_raw_data\\sector_data\\IR468_V2"
+    save_path= os.getcwd() 
 
     # Function for initializing object
     def __init__(self, master):
@@ -27,7 +25,7 @@ class Startscreen:
         frame = Frame(master)
         frame.grid()
         frame.winfo_toplevel().title("AW Khronos")
-        #frame.configure(bg="#3c3f41")
+        #frame.configure(bg="#3c3f41") #Add background color for debugging
 
         #########################################
         # Specify Directories
@@ -95,19 +93,40 @@ class Startscreen:
         C3.select() #Leave turned on
         C3.grid(row=5,column=1,sticky=W+E,padx=(0,10))
 
+        self.Gain = BooleanVar()
+        C3 = Checkbutton(frame, text="Gain", variable=self.Gain, \
+                         onvalue=True, offvalue=False, height=1, \
+                         width=20, anchor=W )
+        C3.select() #Leave turned on
+        C3.grid(row=6,column=1,sticky=W+E,padx=(0,10))
         #########################################
-        # TODO: Settings Menu (Boresight, USL_SEARCH_RANGE, ect.)
+        # TODO: Settings Menu (Boresight, USL_SEARCH_RANGE, etc.)
         #########################################
+        
+        self.label_gain_ref = Label(frame, text="Ref Ant Model:")
+        self.label_gain_ref.grid(row=7, column=0,sticky=E+W,padx=(10,10),pady=(10,10))
+        
+        GAIN_OPTIONS = [
+            "FR6509",
+            "AW3023",
+            "Satimo LB"
+        ]  # etc
+
+        self.gain_ref_model = StringVar(frame)
+        self.gain_ref_model.set(GAIN_OPTIONS[0])  # default value
+
+        x = OptionMenu(frame, self.gain_ref_model, *GAIN_OPTIONS)
+        x.grid(row=7,column=1,sticky=W+E,padx=(0,10))
 
         #########################################
         # Generate
         #########################################
         self.ComputeButton = Button(frame, text="Generate", bg="#00FF00", command=self.run_program)
         self.ComputeButton.config(relief=SUNKEN)
-        self.ComputeButton.grid(row=6,column=1,sticky=E,padx=(0,10),pady=(20,10))
+        self.ComputeButton.grid(row=8,column=1,sticky=E,padx=(0,10),pady=(20,10))
 
         self.HelpButton = Button(frame, text="Help", command=self.help_button)
-        self.HelpButton.grid(row=7,column=1,sticky=E,padx=(0,10),pady=(0,10))
+        self.HelpButton.grid(row=9,column=1,sticky=E,padx=(0,10),pady=(0,10))
 
     ##########################################
     # Class Functions
@@ -134,11 +153,17 @@ class Startscreen:
                        antenna_type = self.antenna_type.get(),
                        Images = self.Images.get(),
                        Report = self.Report.get(),
-                       Pattern_Files = self.Pattern_Files.get() )
+                       Pattern_Files = self.Pattern_Files.get(),
+                       Gain = self.Gain.get(),
+                       gain_ref_model = self.gain_ref_model.get()
+                       )
+        
+        self.test()
 
         #Run generate data
         prog.run()
 
+    #For Debug, print info
     def test(self):
         print("\n\n\n")
         print("Source Dir: \n"+self.source_dir)
@@ -147,9 +172,10 @@ class Startscreen:
         print("Images: "+str(self.Images.get()))
         print("Report: "+str(self.Report.get()))
         print("Pattern Files: "+str(self.Pattern_Files.get()))
+        print("Gain Ref Model: " + self.gain_ref_model.get())
 
     def help_button(self):
-        url = 'https://github.com/wkeu/antenna_data_processing_system'
+        url = 'https://github.com/wkeu/antenna_data_processing_system#antenna-data-processing-system'
         webbrowser.open_new(url)
 
 # Main window

@@ -1,10 +1,3 @@
-
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 29 15:14:12 2018
-
-@author: matt.slevin
-"""
 from generate_data import * 
 
 #read in the data
@@ -18,13 +11,13 @@ for freq in horz_data_all:
     horz_data = horz_data_all[freq].convert_objects(convert_numeric=True)
     vert_data = vert_data_all[freq].convert_objects(convert_numeric=True)
     
-    #Normalise
+    #Normalize
     test_ant=Sector("test")
     horz_data_norm, _ =test_ant.normalise2(horz_data,horz_data)
     vert_data_norm, _ =test_ant.normalise2(vert_data,vert_data)
     
     
-    #Convert data to planent string format
+    #Convert data to planet string format
     def convert_data_to_str(data):
         string=""
         
@@ -50,5 +43,3 @@ for freq in horz_data_all:
     print("o.O.o")
 
 print("o.O.0.O.o")
-
-

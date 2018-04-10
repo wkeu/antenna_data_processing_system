@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 29 12:21:19 2018
-
-@author: matt.slevin
-"""
 
 from generate_data import * 
 
@@ -17,7 +11,7 @@ vert_data=all_ports["P1"]["EL T0 CO"]["amplitude"]
 horz_data = horz_data["3300.00"].convert_objects(convert_numeric=True)
 vert_data = vert_data["3300.00"].convert_objects(convert_numeric=True)
 
-#Normalise
+#Normalize
 test_ant=Sector("test")
 horz_data_norm, _ =test_ant.normalise2(horz_data,horz_data)
 vert_data_norm, _ =test_ant.normalise2(vert_data,vert_data)

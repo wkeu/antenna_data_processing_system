@@ -34,7 +34,7 @@ class Masterantenna:
     ##############################
     #TODO: Evaluate weather or not we use this function for anything.
     def find_az_peak(self,co, cr):  # Function to find peak of azimuth
-        az_peak_amp = co.max()  # find peak valie in each column
+        az_peak_amp = co.max()  # find peak value in each column
         az_peak_pos = co.idxmax()  # find index no of peak value
         az_peak = pd.concat([az_peak_amp, az_peak_pos], axis=1)  # join az_peak_amp & az peak_pos
         az_peak = pd.concat([az_peak_amp, az_peak_pos], axis=1)  # join az_peak_amp & az peak_pos
@@ -43,10 +43,10 @@ class Masterantenna:
 
     ###############################################################################
     #
-    #   normalise co & cr together
+    #   normalize co & cr together
     #
     ###############################################################################
-    # TODO: Evaluate wheather or not we need to have a normalise2 function
+    # TODO: Evaluate whether or not we need to have a normalise2 function
     def normalise(self,co, cr):
         az_peak_amp = co.max()
         normalise_co = co - az_peak_amp
@@ -54,7 +54,7 @@ class Masterantenna:
         normalised_az = pd.concat([normalise_co, normalise_cr], axis=1)
         return normalised_az
 
-    # TODO: Merge Normalize and Normailse two into one function.
+    # TODO: Merge Normalize and Normalize2 into one function.
     def normalise2(self, co, cr):
         # Function needed for plotting. Returns two results rather than one.
         az_peak_amp = co.max()
@@ -69,7 +69,7 @@ class Masterantenna:
         return idx
 
     def stretch_axis(self,x, y, factor):
-        # "Stretch" the axis to have xfactor more datapoints
+        # "Stretch" the axis to have xfactor more data-points
         # create a new angle axis with smaller increment size
         x_strch = np.linspace(0, len(x) - len(x) / (len(x) * factor), factor * len(x))
 
@@ -139,7 +139,7 @@ class Masterantenna:
         _, peak_sl_amp = df_peaks.max()
 
         # if a peak has been detected
-        #TODO: This dosnt work properly for the angle. Problem is that it is pulling out the peak angle
+        #TODO: This dose not work properly for the angle. Problem is that it is pulling out the peak angle
         if not (df_peaks.empty):
             usl_angle_idx = df_peaks["amp"].idxmax()
             usl_peak_angle = float(df_peaks["angle"].loc[[usl_angle_idx]])
@@ -164,7 +164,7 @@ class Masterantenna:
         return usl, usl_peak_angle
 
 
-    # Calulate the 1st USL in a given frequency range
+    # Calculate the 1st USL in a given frequency range
     def cal_first_usl(self,wave):
 
         # Find the peaks and troughs
@@ -282,14 +282,14 @@ class Masterantenna:
 
         #Peak at full circle
         first_pk=np.concatenate((  wave_np[0:90]  ,  np.full(180,wave_np.min())  ,  wave_np[270:360]  ))
-        #Centre Peak
+        #Center Peak
         centre_pk=np.concatenate((  np.full(90,wave_np.min())  ,  wave_np[90:270]  ,  np.full(90,wave_np.min())  ))
 
-        #First wave centred and flipped
+        #First wave centered and flipped
         first_pk_flipped=np.concatenate((  np.full(90,wave_np.min())  ,  wave_np[270:360] ,  wave_np[0:90] ,  np.full(90,wave_np.min())  ))
         first_pk_flipped=np.fliplr([first_pk_flipped])[0]
 
-        #Convert into a series datafram
+        #Convert into a series dataframe
         first_pk=pd.Series(first_pk)
         centre_pk=pd.Series(centre_pk)
         first_pk_flipped=pd.Series(first_pk_flipped)
@@ -349,7 +349,7 @@ class Sector(Masterantenna):
         return results
 
     ###########################################################################
-    # Azmuth
+    # Azimuth
     ###########################################################################
     def find_xpol(self,co, cr):
         xpol_at_sector = co.iloc[self.BORESIGHT] - cr.iloc[self.BORESIGHT]  # co at sector - cr at sector
@@ -360,13 +360,13 @@ class Sector(Masterantenna):
     def find_front_to_back(self,co):
 
         # define sector angle
-        back_sight1 = self.BORESIGHT - 180  # define the backsight(back of antenna). eg 0 & 360 degrees
+        back_sight1 = self.BORESIGHT - 180  # define the back-sight(back of antenna). eg 0 & 360 degrees
         back_sight2 = self.BORESIGHT + 180
         
         fbr_search1 = back_sight1 + (self.FBR_RANGE + 1)  # this is search range 1 eg 0 - 30 degrees
         fbr_search2 = back_sight2 - (self.FBR_RANGE + 1)  # this is search range 2 eg 30 - 360 degrees
 
-        fbr1, _, fbr2 = np.split(co, [fbr_search1, fbr_search2], axis=0)  # Split Co dataframe into 3 segements
+        fbr1, _, fbr2 = np.split(co, [fbr_search1, fbr_search2], axis=0)  # Split Co dataframe into 3 segments
 
         fbr_max = pd.concat([fbr1, fbr2], axis=0)  # join fbr1 & fbr2
 
@@ -394,7 +394,7 @@ class Sector(Masterantenna):
 
         # Collect keys
         key_list = az_co.keys()
-        # Initalise list
+        # Initialize list
         bw_3db = list()
 
         # Cycle through each frequency column
@@ -415,7 +415,7 @@ class Sector(Masterantenna):
     def find_squint(self,az_co):
         # Collect keys
         key_list = az_co.keys()
-        # Initalise list
+        # Initialize list
         sqt = list()
         midpoint = list()
 
@@ -423,7 +423,7 @@ class Sector(Masterantenna):
         for i in key_list:
             # Work with each column individually
             lowwer_angle, upper_angle = self.find_3db_intersection_angles(az_co[i])
-            # Culculate squint
+            # Calculate squint
             x, y = self.cal_squint(lowwer_angle, upper_angle)
             sqt.append(x)
             midpoint.append(y)
@@ -451,7 +451,7 @@ class Sector(Masterantenna):
     def find_tilt_dev(self,el_co, measurement_type, fname):
         # Collect keys
         key_list = el_co.keys()
-        # Initalise list
+        # Initialize list
         dev = list()
         midpoint = list()
         ant_tilt = self.get_tilt(fname)
@@ -459,7 +459,7 @@ class Sector(Masterantenna):
         for i in key_list:
             # Work with each column individually
             lowwer_angle, upper_angle = self.find_3db_intersection_angles(el_co[i])
-            # Culculate squint
+            # Calculate squint
             x, y = self.cal_tilt_dev(lowwer_angle, upper_angle, ant_tilt)
             dev.append(x)
             midpoint.append(y)
@@ -472,7 +472,7 @@ class Sector(Masterantenna):
     def find_peak_dev(self, el_co, measurement_type, fname):
         # Collect keys
         key_list = el_co.keys()
-        # Initalise list
+        # Initialize list
         peak_dev = list()
         theoretical_peak = list()
 
@@ -502,7 +502,7 @@ class Sector(Masterantenna):
     #
     ###############################################################################
 
-    # Calulate the 1st USL for a table
+    # Calculate the 1st USL for a table
     def find_first_usl(self,el_co, measurement_type):
         # Convert the data so that it is stored in a more appropriate format
         el_co = el_co.convert_objects(convert_numeric=True)
@@ -530,14 +530,14 @@ class Sector(Masterantenna):
     #
     ###############################################################################
 
-    # TODO:   Add support for wrap around. (ie if we go into a ngative number) the
-    #        problem arises if we have a peak that is not centred at around 180
+    # TODO:   Add support for wrap around. (ie if we go into a negative number) the
+    #        problem arises if we have a peak that is not centered at around 180
     #        degrees
 
     # Finds the difference in amplitude between largest side lobe and peaks over a
     # certain frequency range. By default 180 degrees away from the peak.
 
-    # Calulate the USL for a table with a given angle range
+    # Calculate the USL for a table with a given angle range
     def find_usl_in_range(self,el_co, measurement_type, Boresight=False):
 
         # Convert the data so that it is stored in a more appropriate format
@@ -559,8 +559,6 @@ class Sector(Masterantenna):
         usl_pd = usl_pd.set_index('index')
 
         return usl_pd
-
-
 
 ###############################################################################
 #
@@ -624,11 +622,11 @@ class Omnidirectional(Masterantenna):
     #
     
     def find_ripple(self,az_co, measurement_type="Ripple"):
-        # Function to find the 3db beamwidths for a given graph
+        # Function to find the 3db beam-widths for a given graph
         # Collect keys
         key_list = az_co.keys()
 
-        # Initalise list
+        # Initialize list
         ripple = list()
 
         # Cycle through each frequency column
@@ -670,7 +668,7 @@ class Omnidirectional(Masterantenna):
 
         # Collect keys
         key_list = az_co.keys()
-        # Initalise list
+        # Initialize list
         bw_3db_first_pk = list()
         bw_3db_centre_pk = list()
         
@@ -684,7 +682,7 @@ class Omnidirectional(Masterantenna):
             lowwer_angle, upper_angle = self.find_3db_intersection_angles(first_pk)
             bw_3db_first_pk.append(self.cal_3db_bw(lowwer_angle, upper_angle))            
             
-            #Centre Peak
+            #Center Peak
             lowwer_angle, upper_angle = self.find_3db_intersection_angles(centre_pk)
             bw_3db_centre_pk.append(self.cal_3db_bw(lowwer_angle, upper_angle))  
 
@@ -698,7 +696,7 @@ class Omnidirectional(Masterantenna):
         return bw_3db_pd
     
     def find_first_usl(self,el_co, measurement_type):
-        # Calulate the 1st USL 
+        # Calculate the 1st USL 
         
         # Convert the data so that it is stored in a more appropriate format
         el_co = el_co.convert_objects(convert_numeric=True)
@@ -721,7 +719,7 @@ class Omnidirectional(Masterantenna):
             first_usl_first_pk.append(usl)
             first_usl_first_pk_angle.append(angle)
             
-            #Centre
+            #Center
             usl, angle = self.cal_first_usl(centre_pk)
             first_usl_centre_peak.append(usl)
             first_usl_centre_pk_angle.append(angle)
@@ -737,7 +735,7 @@ class Omnidirectional(Masterantenna):
 
         return first_usl_pd
     
-    # Calulate the USL for a table with a given angle range
+    # Calculate the USL for a table with a given angle range
     def find_usl_in_range(self,el_co, measurement_type, Boresight=False):
 
         # Convert the data so that it is stored in a more appropriate format
@@ -763,7 +761,7 @@ class Omnidirectional(Masterantenna):
             range_usl_first_pk.append(usl)
             range_usl_first_pk_angle.append(angle)
             
-            #Centre
+            #Center
             usl, angle = self.calc_usl_in_range(centre_pk, Boresight)
             range_usl_centre_peak.append(usl)
             range_usl_centre_pk_angle.append(angle)
@@ -784,7 +782,7 @@ class Omnidirectional(Masterantenna):
         # Collect keys
         key_list = el_co.keys()
         
-        # Initalise list
+        # Initialize list
         dev_first_pk = list()
         midpoint_first_pk = list()
         dev_centre_pk = list()
@@ -805,7 +803,7 @@ class Omnidirectional(Masterantenna):
             dev_first_pk.append(x)
             midpoint_first_pk.append(y)
     
-            # Centre Peak
+            # Center Peak
             lowwer_angle, upper_angle = self.find_3db_intersection_angles(centre_pk)
             x, y = self.cal_tilt_dev(lowwer_angle, upper_angle, ant_tilt)
             dev_centre_pk.append(x)
@@ -828,7 +826,7 @@ class Omnidirectional(Masterantenna):
         # Collect keys
         key_list = el_co.keys()
         
-        # Initalise list
+        # Initialize list
         first_peak_dev = list()
         actual_first_peak = list()
         centre_peak_dev = list()
@@ -848,7 +846,7 @@ class Omnidirectional(Masterantenna):
             first_peak_dev.append(deviation)
             actual_first_peak.append(pk_angle)
             
-            # Centre Peak
+            # Center Peak
             deviation, pk_angle = self.cal_peak_dev( centre_pk, ant_tilt)
             centre_peak_dev.append(deviation)
             actual_centre_peak.append(pk_angle)
