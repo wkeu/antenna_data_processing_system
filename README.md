@@ -29,7 +29,7 @@ custom packages to install to enviroment(pip install):
 *Note: You will need to adjust Kronus.bat so that it points to the correct directory. 
 
 ### Video Tutorial 
-[![Installation Instructions](https://img.youtube.com/vi/T-D1KVIuvjA/0.jpg)](http://www.youtube.com/watch?v=T-D1KVIuvjA)
+[![Installation Instructions](https://i.ytimg.com/vi/rOvK_EEp3lo/hqdefault.jpg?sqp=-oaymwEYCKgBEF5IVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLCspFtpQDeIr2Rn6dzbX8CMokG1Ww )](https://youtu.be/rOvK_EEp3lo?list=PL9XiBq5tluqR__rTCCEkhs2Nn9olB-A-Q)
 
 ## Demo
 -------
