@@ -41,7 +41,7 @@ def rotate_panda(pd_waves, rotate_angle):
     
     return result
 
-source_dirA="C:/Users/Matt Slevin/Documents/GitHub/antenna_data_processing_system/antenna_raw_data/sector_data/IR468_V2_test"
+source_dirA="C:/Users/Matt Slevin/Documents/Files/GitHub/antenna_data_processing_system/antenna_raw_data/sector_data/AW3376/aut_ant/"
 source_dirB="C:/Users/Matt Slevin/Documents/GitHub/antenna_data_processing_system/antenna_raw_data/sector_data/AW3014"
 save_path= "C:/Users/Matt Slevin/Documents/GitHub/antenna_data_processing_system/"
 
