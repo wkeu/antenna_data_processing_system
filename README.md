@@ -20,7 +20,7 @@ This allowed for the interactive visualisation of antenna specification. Additio
 ## Installation instructions
 ---------------------------
 
-*install anaconda 3.6.4 (Windows 64 Bit)(https://anaconda.org/anaconda/python/3.6.4/download/win-64/python-3.6.4-h0c2934d_3.tar.bz2)
+*install anaconda 3.6.4 (Windows 64 Bit)(https://www.anaconda.com/download/)
 
 custom packages to install to enviroment(pip install):
 * mpld3==0.3
