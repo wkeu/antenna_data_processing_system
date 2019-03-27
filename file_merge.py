@@ -44,7 +44,7 @@ def read_to_panda(f_name):
     f.close()
     
     #Split the file based on the frequency. Using the word 'frequency' as delimiter 
-    data_per_frequency =string.split("Frequency") 
+    data_per_frequency =string.split("Frequency")
     
     #Initalise amplitude and phase dataframes
     df_amplitude=pd.DataFrame()

@@ -55,7 +55,7 @@ def panda_to_word_table(doc,df,measurment_type="El tilt deviation",spec="",style
     t.style = style
     
     cell = t.cell(0, 0)
-    cell.text = 'Mean'
+    cell.text = 'Average'
     mean=df.values.mean()
     t.cell(0, 1).text=str(round(mean,2))
     
@@ -68,7 +68,11 @@ def panda_to_word_table(doc,df,measurment_type="El tilt deviation",spec="",style
     t.cell(2, 1).text=str(df.values.min())
     
     cell = t.cell(3, 0)
-    cell.text = 'Pass'
+    cell.text = 'Result'
+    midpoint = ((df.values.max() - df.values.min())/2)+df.values.min()
+    tolerance = ((df.values.max() - df.values.min())/2)
+    t.cell(3, 1).text=str(round(midpoint)) +' ± ' + str(round(tolerance))
+    doc.add_page_break()
     
 #Function to place images into report
 def insert_cart_plots(doc,images_dir_path):
@@ -89,7 +93,7 @@ def insert_cart_plots(doc,images_dir_path):
         name=picture.split("\\")[-1]
         name=name.split(".")[0]
         
-        doc.add_heading(name, level=2)
+        doc.add_heading(name, level=5)
         doc.add_picture(picture,width=Inches(6.6))
 
 def insert_radiation_tables(doc,master_table_path):
@@ -100,9 +104,16 @@ def insert_radiation_tables(doc,master_table_path):
     sheet_names = xl.sheet_names
     
     for sheet_name in sheet_names:
-        doc.add_heading(sheet_name, level=2)
+        doc.add_heading(sheet_name, level=5)
         df = xl.parse(sheet_name)
-        panda_to_word_table(doc,df,measurment_type=sheet_name,spec="")    
+        panda_to_word_table(doc,df,measurment_type=sheet_name,spec="")   
+        
+     
+        
+        
+        
+        
+        
 
 ###############################################################################
 #
@@ -113,7 +124,7 @@ def insert_radiation_tables(doc,master_table_path):
 def generate_report(dir_path,antenna_model="AWXXXX"):
     
     master_table_path = dir_path + "master_table.xlsx"
-    gain_table_path = dir_path + "master_table.xlsx"
+    gain_table_path = dir_path + "gain_table.xlsx"
     images_dir_path=dir_path + "images/CART"
     gain_images_dir_path=dir_path + "images/GAIN"
     save_path=dir_path +antenna_model+"_report.docx"
@@ -122,12 +133,18 @@ def generate_report(dir_path,antenna_model="AWXXXX"):
     doc = Document()
     doc.add_heading('Antenna Report', 0)
     
-    #Add the plots
-    insert_cart_plots(doc,images_dir_path)
     
+    #doc.add_heading("Electrical Tables", level=1)
+   #insert_gain_tables(doc,gain_table_path)
+    
+    #doc.add_page_break()
     doc.add_heading("Radiation Tables", level=1)
     
     insert_radiation_tables(doc,master_table_path)
+   
+    #Add the plots
+    insert_cart_plots(doc,images_dir_path)
+    
     
     # save the doc
     doc.save(save_path)

@@ -55,10 +55,10 @@ class Generate_data:
         self.clear_processed_data()
         
         #TODO: Set input to read in all ports to be source dir
-        all_ports=read_in_data_all_ports(    self.source_dir + "/aut_ant/"    )
+        all_ports=read_in_data_all_ports(    self.source_dir + "/raw_data/"    )
         
         
-        rotate_angle= 0 #degrees, note ensure that this is a postivie angle 
+        rotate_angle= 0#degrees, note ensure that this is a postivie angle 
                  #this angle rotates back
                  
         all_ports = self.rotate_all_ports(all_ports,rotate_angle) 
@@ -91,8 +91,8 @@ class Generate_data:
             
         if self.Pattern_Files == True:
             print("Generating a Pattern Files")
-            print(self.gain_ref_model)
-            #generate_pattern_files(all_ports,results_per_port,antenna_model)
+            print(self.Pattern_Files)
+           #generate_pattern_files(all_ports,results_per_port,antenna_model)
 
                 
         if self.Report == True:
@@ -175,7 +175,13 @@ class Generate_data:
         final_results_table.to_csv( self.save_folder + "/" + port_name+" results.csv" )                                                    # Function to output results of calc to table
         
         return final_results_table
-
+   
+    
+    def az_ascii_file_gen(az_res,port_name,save_dir):
+       
+        az_res.to_csv(self.save_folder + "/" + port_name+" ascii.csv")
+        
+        return az_res
     ###############################################################################
     # Function which returns the names of the Azimuth measurements. It is assumed 
     # that there will only be one co and one cross measurement. 
@@ -258,9 +264,9 @@ class Generate_data:
         
         #Plots
         if (self.Images and isinstance(az_co_str,str)):
-            plot_norm_cart(  az_co,az_cr  ,  fname=port_name +" Cart", save_dir=self.save_folder+"/images/CART/")
+            plot_norm_cart(  az_co,az_cr  ,  fname=port_name , save_dir=self.save_folder+"/images/CART/")
             plot_norm_polar(  az_co,az_cr  , fname=port_name+" Polar", save_dir=self.save_folder+"/images/POLAR/" )
-            plot_norm_cart_interacive_az(  az_co,az_cr  ,  fname=port_name +" AZ Cart", save_dir=self.save_folder+"/images/HTML/")
+            plot_norm_cart_interacive_az(  az_co,az_cr  ,  fname=port_name +" AZ ", save_dir=self.save_folder+"/images/HTML/")
 			
         ###########################################################################
         # Elevation (Calculations and Plots) 
@@ -277,9 +283,9 @@ class Generate_data:
             
             #Plots
             if(self.Images):
-                plot_norm_cart(  el_co,el_co  , fname=port_name + " " +file+" Cart", save_dir=self.save_folder+"/images/CART/" )
+                plot_norm_cart(  el_co,el_co  , fname=port_name , save_dir=self.save_folder+"/images/CART/" )#+ " " +file
                 plot_norm_polar( el_co,el_co  , fname=port_name + " " +file+" Polar", save_dir=self.save_folder+"/images/POLAR/" )
-                plot_norm_cart_interacive_el(  el_co, fname=port_name + " " +file+" Cart", save_dir=self.save_folder+"/images/HTML/")
+                plot_norm_cart_interacive_el(  el_co, fname=port_name + " " +file+" EL Cart", save_dir=self.save_folder+"/images/HTML/")
         
         #Put into one table
         if self.is_empty(not(list_of_rt)):
@@ -347,7 +353,7 @@ class Generate_data:
             p1=i
         
             #Drop Avg, Max and Min
-            p1 = results_per_port[i].drop(['Average', 'Max','Min'])
+            p1 = results_per_port[i]#.drop(['Average', 'Max','Min'])
         
             #Isolate column from port file
             p1_item=p1[item]
@@ -368,6 +374,7 @@ class Generate_data:
     #Function to generate a master table 
     def generate_master_table(self,results_per_port,save_path):
         
+       
         #Get a clean list of results
         measurements_lst = self.get_list_of_measurements(results_per_port)
         list(range(0,len(measurements_lst)))
@@ -388,6 +395,14 @@ class Generate_data:
             final_tables[i].to_excel(writer, sheet_name=measurements_lst[i])
             
         writer.save()
+        
+    def save_ascii(self,az_res,save_path):
+            
+        writer = pd.ExcelWriter(self.save_folder+'ascii.xlsx', engine='xlsxwriter')
+        writer.save()
+        
+        
+        
         
     def rotate_all_ports(self,all_ports,rotate_angle=0):
 

@@ -14,7 +14,7 @@ and .ant formats.
     #
 ###############################################################################
 
-def export_to_planet(horz_data,vert_data,header,fname="test",path):
+'''def export_to_planet(horz_data,vert_data,header,fname="test",path):
     
     #Function to convert file
     def convert_data_to_str(data):
@@ -50,7 +50,6 @@ def export_to_planet(horz_data,vert_data,header,fname="test",path):
     f = open(path+fname+".planet.txt",'w')
     f.write(final_planet)
     f.close()
-
 ###############################################################################
     #
     # msi
@@ -139,7 +138,7 @@ def export_to_atoll(horz_data,vert_data,header,fname="test",path):
     # ant
     #
 ###############################################################################
-
+'''
 def export_to_ant(horz_data,vert_data,header,fname="test",path):
 
     #Convert data to planent string format
@@ -183,3 +182,4 @@ def generate_pattern_files(all_ports,model,save_dir):
     horz_data=all_ports["P1"]["AZ T0 CO"]["amplitude"]
     vert_data=all_ports["P1"]["EL T0 CO"]["amplitude"]
 
+    return horz_data,vert_data

@@ -8,8 +8,8 @@
 import numpy as np
 import pandas as pd
 from scipy.signal import savgol_filter
-
 from peakdetect import peakdetect
+
 
 
 ########################################################################################################################
@@ -22,10 +22,10 @@ class Masterantenna:
     "Common base class for all antennas"
 
     #Global Variables
-    BORESIGHT = 180         # Specify boresight angle. Not selection of Boresight ( # should be an interger in the range 0-360)
-    USL_SEARCH_RANGE = 45   # Specify range frm Main lobe to search for USL
-    FBR_RANGE = 30          # define +/- range to check for FBR
-
+    BORESIGHT =180  # Specify boresight angle. Not selection of Boresight ( # should be an interger in the range 0-360)
+    USL_SEARCH_RANGE = 30    # define +/- range to check for FBR
+    FBR_RANGE = 30
+    XPOL_ANGLE = 60
     def __init__(self, name):
         self.name = name
 
@@ -41,6 +41,13 @@ class Masterantenna:
         az_peak.columns = ['amplitude', 'angle']
         return az_peak
 
+    def find_el_peak(self,co):  # Function to find peak of azimuth
+        el_peak_amp = co.max()  # find peak value in each column
+        el_peak_pos = co.idxmax()  # find index no of peak value
+        el_peak = pd.concat([el_peak_amp, el_peak_pos], axis=1)  # join az_peak_amp & az peak_pos
+        el_peak = pd.concat([el_peak_amp, el_peak_pos], axis=1)  # join az_peak_amp & az peak_pos
+        el_peak.columns = ['amplitude', 'angle']
+        return el_peak
     ###############################################################################
     #
     #   normalize co & cr together
@@ -190,7 +197,7 @@ class Masterantenna:
     
         midpoint = (lowwer_angle + upper_angle) / 2.0
         # this is our ideal value
-        squint = abs(midpoint - self.BORESIGHT)
+        squint = (midpoint - self.BORESIGHT)
     
         return squint, midpoint % 360
 
@@ -255,10 +262,17 @@ class Masterantenna:
         return angle[left_intxn], angle[right_intxn]
     
     # function to calculate squint. Inputs are 3db intersection points
+    def cal_tilt(self,r_int, l_int, ant_tilt):
+        midpoint = (r_int + l_int) / 2.0
+        tilt = (self.BORESIGHT + ant_tilt)  # this is our ideal value
+        actual_tilt = (midpoint - self.BORESIGHT)
+
+        return actual_tilt, midpoint
+
     def cal_tilt_dev(self,r_int, l_int, ant_tilt):
         midpoint = (r_int + l_int) / 2.0
         tilt = (self.BORESIGHT + ant_tilt)  # this is our ideal value
-        deviation = abs(midpoint - tilt)
+        deviation = (midpoint - tilt)
 
         return deviation, midpoint
 
@@ -275,6 +289,8 @@ class Masterantenna:
         deviation = abs(pk_angle - tilt)
 
         return deviation, pk_angle
+    
+    
 
     def split_wave(self,wave):
     #Function to isolate certain sections of an omni wave
@@ -316,46 +332,80 @@ class Sector(Masterantenna):
         #Convert to numeric pd          
         az_co = az_co.convert_objects(convert_numeric=True)
         az_cr = az_cr.convert_objects(convert_numeric=True)
-
-        #Calculate
-        xpol_at_sector = self.find_xpol(az_co,az_cr)    
-        fbr = self.find_front_to_back(az_co)                            
-        az_bw_3db = self.find_3db_bw(az_co,"Az Co 3dB Beamwidth")
-        squint= self.find_squint(az_co)
         
-        #Put into a dataframe
+        #Calculate
+        xpol_at_sector = self.find_xpol(az_co,az_cr) 
+        #xpol_at_M60 = self.find_xpol_M60(az_co,az_cr)
+        #xpol_at_P60 = self.find_xpol_P60(az_co,az_cr)
+        #power_at_M60=self.reduce_power(az_co)
+        fbr = self.find_front_to_back(az_co)                            
+        az_bw_3db = self.find_3db_bw(az_co,"AZ HPBW")
+        squint= self.find_squint(az_co)
+        az_peak=self.find_az_peak(az_co,az_cr)
+        az = az_co
+                             #Put into a dataframe
         results = pd.DataFrame()
-        results = pd.concat([az_bw_3db,squint,xpol_at_sector,fbr],axis = 1)
+        results = pd.concat([az_peak,az_bw_3db,squint,xpol_at_sector,fbr],axis = 1)#,xpol_at_M60, xpol_at_P60
         
         return results
     
+    def az_ascii(self,az_co,az_cr):
+        #Convert to numeric pd          
+        az_co = az_co.convert_objects(convert_numeric=True)
+        az_cr = az_cr.convert_objects(convert_numeric=True)
+        
+        az_res = pd.DataFrame()
+        az_res =pd.concat([az_co,az_cr],axis = 1)
+            
+        return az_res
+
     #Results table for elevation 
     def results_table_el(self,el_co,fname="EL TX"):
         #Convert to numeric pd    
         el_co = el_co.convert_objects(convert_numeric=True)
         
         #Calculate
-        el_bw_3db = self.find_3db_bw(el_co,"3dB Beamwidth "+fname)
-        first_usl= self.find_first_usl(el_co,"1st upper sidelobe "+fname)
-        usl_range = self.find_usl_in_range(el_co,measurement_type="USL in range "+fname)
-        usl_range_bs = self.find_usl_in_range(el_co, measurement_type="USL in range (BS) "+fname, Boresight=True)
-        peak_dev = self.find_peak_dev(el_co,'Peak Deviation '+fname,fname)
-        tilt_dev = self.find_tilt_dev(el_co,'Tilt Deviation '+fname,fname)    
+        el_bw_3db = self.find_3db_bw(el_co,"EL HPBW ")#+fname
+        first_usl= self.find_first_usl(el_co,"1ST USLS ")#+fname
+        #usl_range = self.find_usl_in_range(el_co,measurement_type="USLS in range "+fname)
+        #usl_range_bs = self.find_usl_in_range(el_co, measurement_type="USLS in range (BS) "+fname, Boresight=True)
+        #peak_dev = self.find_peak_dev(el_co,'Tilt Deviation(peak) '+fname,fname)
+        #tilt_dev = self.find_tilt_dev(el_co,'Tilt Deviation '+fname,fname)    
+        tilt = self.find_tilt(el_co,'Tilt ',fname)#+fname,fname
+        el_peak=self.find_el_peak(el_co)
         
-        #Put into a dataframe
+        # Put into a dataframe
         results = pd.DataFrame()
-        results = pd.concat([el_bw_3db,first_usl,usl_range,usl_range_bs,peak_dev,tilt_dev],axis = 1)
-        
+        results = pd.concat([el_peak,el_bw_3db,first_usl,tilt],axis = 1)
+        '''usl_range,usl_range_bs'''
         return results
 
     ###########################################################################
     # Azimuth
     ###########################################################################
     def find_xpol(self,co, cr):
-        xpol_at_sector = co.iloc[self.BORESIGHT] - cr.iloc[self.BORESIGHT]  # co at sector - cr at sector
+        xpol_at_sector = (co.iloc[self.BORESIGHT] - cr.iloc[self.BORESIGHT])  # co at sector - cr at sector
         xpol_at_sector = xpol_at_sector.to_frame()
-        xpol_at_sector.columns = ['Cross Pole']
+        xpol_at_sector.columns = ['XPD @ 0ᵒ']
         return xpol_at_sector
+
+    def find_xpol_M60(self,co, cr):
+        xpol_at_M60 = (co.iloc[self.BORESIGHT-self.XPOL_ANGLE] - cr.iloc[self.BORESIGHT-self.XPOL_ANGLE])  # co at sector - cr at sector
+        xpol_at_M60 = xpol_at_M60.to_frame()
+        xpol_at_M60.columns = ['XPD @ -60ᵒ']
+        return xpol_at_M60
+    
+    def find_xpol_P60(self,co, cr):
+        xpol_at_P60 = (co.iloc[self.BORESIGHT+self.XPOL_ANGLE] - cr.iloc[self.BORESIGHT+self.XPOL_ANGLE])  # co at sector - cr at sector
+        xpol_at_P60 = xpol_at_P60.to_frame()
+        xpol_at_P60.columns = ['XPD @ +60ᵒ']
+        return xpol_at_P60
+    
+    '''def reduce_power(self,co):
+        power_at_M60 = co.iloc[self.BORESIGHT-self.XPOL_ANGLE] 
+        power_at_M60 = power_at_M60.to_frame()
+        power_at_M60 = ['Power Reduction @ -60ᵒ']
+        return power_at_M60'''
 
     def find_front_to_back(self,co):
 
@@ -373,13 +423,14 @@ class Sector(Masterantenna):
         # Output#
         az_peak_amp = co.max()
 
-        fbr = az_peak_amp - fbr_max.max()
+        fbr = (az_peak_amp - fbr_max.max())
         fbr_pos = fbr_max.idxmax()
         fbr = pd.concat([fbr, fbr_pos], axis=1)
 
-        fbr.columns = ['Front to Back Ratio', '@ Angle']
+        fbr.columns = ['FBR', '@ Angle']
         return fbr
 
+   
     #########
     # Elevation
     #########
@@ -428,8 +479,8 @@ class Sector(Masterantenna):
             sqt.append(x)
             midpoint.append(y)
 
-        sqt_pd = pd.DataFrame({"Squint of 3dB Midpoint": sqt, "@ Angle": midpoint, "index": key_list})
-        sqt_pd = sqt_pd.reindex(columns=["Squint of 3dB Midpoint", "@ Angle", "index"])
+        sqt_pd = pd.DataFrame({"Squint HPBW": sqt, "@ Angle": midpoint, "index": key_list})
+        sqt_pd = sqt_pd.reindex(columns=["Squint HPBW", "@ Angle", "index"])
         sqt_pd = sqt_pd.set_index('index')
         return sqt_pd
 
@@ -468,6 +519,27 @@ class Sector(Masterantenna):
         dev_pd = dev_pd.reindex(columns=[measurement_type, "@ Angle", "index"])
         dev_pd = dev_pd.set_index('index')
         return dev_pd
+    
+    def find_tilt(self,el_co, measurement_type, fname):
+        # Collect keys
+        key_list = el_co.keys()
+        # Initialize list
+        actual_tilt = list()
+        midpoint = list()
+        ant_tilt = self.get_tilt(fname)
+        # Cycle through each frequency column
+        for i in key_list:
+            # Work with each column individually
+            lowwer_angle, upper_angle = self.find_3db_intersection_angles(el_co[i])
+            # Calculate squint
+            x, y = self.cal_tilt(lowwer_angle, upper_angle, ant_tilt)
+            actual_tilt.append(x)
+            midpoint.append(y)
+
+        tilt_pd = pd.DataFrame({measurement_type: actual_tilt, "@ Angle": midpoint, "index": key_list})
+        tilt_pd = tilt_pd.reindex(columns=[measurement_type, "@ Angle", "index"])
+        tilt_pd = tilt_pd.set_index('index')
+        return tilt_pd
 
     def find_peak_dev(self, el_co, measurement_type, fname):
         # Collect keys
@@ -599,20 +671,22 @@ class Omnidirectional(Masterantenna):
         
         #Calculate
         find_3db_bw = self.find_3db_bw(el_co, measurement_type="3dB BW "+fname)
-        first_usl= self.find_first_usl(el_co,"1st USL "+fname)
-        usl_in_range= self.find_usl_in_range(el_co,"USL range "+fname)
-        usl_in_range_bs= self.find_usl_in_range(el_co,"USL range (BS) "+fname,Boresight=True)  
-        tilt_dev = self.find_tilt_dev(el_co, 'Tilt Deviation '+fname,fname)
-        peak_dev = self.find_peak_dev(el_co, 'Peak Deviation '+fname,fname)
+       # first_usl= self.find_first_usl(el_co,"1st USL "+fname)
+        #usl_in_range= self.find_usl_in_range(el_co,"USL range "+fname)
+        #usl_in_range_bs= self.find_usl_in_range(el_co,"USL range (BS) "+fname,Boresight=True)  
+        tilt_dev = self.find_tilt_dev(el_co, 'Tilt Devn '+fname,fname)
+        #tilt = self.find_tilt(el_co, 'Tilt '+fname,fname)
+        peak_dev = self.find_peak_dev(el_co, 'Tilt Dev(peak) '+fname,fname)
         
         #Put into a dataframe
         results = pd.DataFrame()
         results = pd.concat([
                 find_3db_bw,
-                first_usl,
-                usl_in_range,
-                usl_in_range_bs,
+               # first_usl,
+                #usl_in_range,
+                #usl_in_range_bs,
                 tilt_dev,
+                #tilt,
                 peak_dev],axis = 1)
         
         return results
@@ -688,8 +762,8 @@ class Omnidirectional(Masterantenna):
 
         # Format into a data frame
         bw_3db_pd = pd.DataFrame({
-                measurement_type+" 1st pk": bw_3db_first_pk,
-                measurement_type+" mid pk": bw_3db_centre_pk, 
+                measurement_type+" R Lobe": bw_3db_first_pk,
+                measurement_type+" F Lobe": bw_3db_centre_pk, 
                 "index": key_list})
         bw_3db_pd = bw_3db_pd.set_index('index')
 
@@ -726,9 +800,9 @@ class Omnidirectional(Masterantenna):
 
         # Format to panda
         first_usl_pd = pd.DataFrame({
-                measurement_type+" 1st pk": first_usl_first_pk, 
+                measurement_type+" R Lobe": first_usl_first_pk, 
                 "@ Angle f_pk": first_usl_first_pk_angle, 
-                measurement_type+" mid pk": first_usl_centre_peak, 
+                measurement_type+" F Lobe": first_usl_centre_peak, 
                 "@ Angle c_pk": first_usl_centre_pk_angle,
                 "index": key_list})
         first_usl_pd = first_usl_pd.set_index('index')
@@ -768,9 +842,9 @@ class Omnidirectional(Masterantenna):
 
         # Format to panda
         range_usl_pd = pd.DataFrame({
-                measurement_type+" 1st pk": range_usl_first_pk, 
+                measurement_type+" R Lobe": range_usl_first_pk, 
                 "@ Angle f_pk": range_usl_first_pk_angle, 
-                measurement_type+" mid pk": range_usl_centre_peak, 
+                measurement_type+" F Lobe": range_usl_centre_peak, 
                 "@ Angle c_pk": range_usl_centre_pk_angle,
                 "index": key_list})
         range_usl_pd = range_usl_pd.set_index('index')
@@ -811,9 +885,9 @@ class Omnidirectional(Masterantenna):
             
         # Format to panda data frame
         dev_pd = pd.DataFrame({
-                measurement_type+" 1st pk": dev_first_pk, 
+                measurement_type+" F Lobe": dev_first_pk, 
                 "@ Angle f_pk": midpoint_first_pk, 
-                measurement_type+" mid pk": dev_centre_pk, 
+                measurement_type+" R Lobe": dev_centre_pk, 
                 "@ Angle c_pk": midpoint_centre_pk, 
                 "index": key_list})
         
@@ -853,9 +927,9 @@ class Omnidirectional(Masterantenna):
                         
         # Format to panda data frame
         dev_pd = pd.DataFrame({
-                measurement_type+" 1st pk": first_peak_dev, 
+                measurement_type+" F Lobe": first_peak_dev, 
                 "@ Angle f_pk": actual_first_peak, 
-                measurement_type+" mid pk": centre_peak_dev, 
+                measurement_type+" R Lobe": centre_peak_dev, 
                 "@ Angle c_pk": actual_centre_peak, 
                 "index": key_list})
         

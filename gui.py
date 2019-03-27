@@ -58,8 +58,9 @@ class Startscreen:
         self.label_5.grid(row=2, column=0,sticky=E+W,padx=(10,10),pady=(10,10))
 
         OPTIONS = [
+            "Sector",
             "Omnidirectional",
-            "Sector"
+            
         ]  # etc
 
         self.antenna_type = StringVar(frame)
